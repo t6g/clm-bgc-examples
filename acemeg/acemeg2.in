@@ -27,14 +27,21 @@ CHEMISTRY
   IMMOBILE_SPECIES
     Acemeg
   /
-  REACTION_SANDBOX
-     AceMeg
-      RATE_CONSTANT      1.0d-6
-      HALFSATURATIONAC   1.0d-5
-      YIELDCOEFFICIENT   0.02
-     /
-  /
+:  REACTION_SANDBOX
+:     AceMeg
+:      RATE_CONSTANT      1.0d-6
+:      HALFSATURATIONAC   1.0d-5
+:      YIELDCOEFFICIENT   0.02
+:     /
+:  /
 :  LOG_FORMULATION
+
+  MICROBIAL_REACTION
+    REACTION Acetate- + H2O <-> Methane(aq) + HCO3- 
+    RATE_CONSTANT     1.0d-6
+    MONOD Acetate-    1.0d-5
+    BIOMASS           Acemeg 0.02
+  /
   DATABASE ../../pflotran-clm4me/database/hanford.dat
   OUTPUT
     all
@@ -115,7 +122,7 @@ CONSTRAINT initial
     HCO3-       1.0d-10 T 
   /
   IMMOBILE
-    Acemeg     1.0d-6
+    Acemeg       1.0d-6
   /
 END
 

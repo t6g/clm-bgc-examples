@@ -21,14 +21,14 @@ CHEMISTRY
   MICROBIAL_REACTION
     REACTION Methane(aq) + 2 O2(aq) <-> CO2(aq) + 2 H2O
     RATE_CONSTANT     1.25d-10
-    MONOD Methane(aq) 5.0d-6
-    MONOD O2(aq)      2.0d-5
+    MONOD Methane(aq) 2.0d-4
+    MONOD O2(aq)      1.0d-4
   /
 !  REACTION_SANDBOX
 !    CH4O
-!      RATE_CONSTANT 1.25d-8 ! mol/m3 s
-!      HALFSATURATIONCH4 5.0d-6
-!      HALFSATURATIONO2  2.0d-5
+!      RATE_CONSTANT 1.25d-10
+!      HALFSATURATIONCH4 2.0d-4
+!      HALFSATURATIONO2  1.0d-4
 !    /
 !  /
 

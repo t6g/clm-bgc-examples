@@ -30,13 +30,13 @@ The general decomposition reaction is
 \end{equation}
 
 \begin{tabular}{lll}
-$\text{CN}_u$ & = & upstream pool \\
-$\text{CN}_d$ & = & downstream pool \\
-$\text{CO}_2$ & = & \\
-$\text{N}_\text{mineral}$ & = &mineral nitrogen \\
-$u$ & = & molecular weight ratio of C and N divided by upstream pool C/N \\
-$d$ & = & molecular weight ratio of C and N divided by downstream pool C/N \\
-$f$ & = & respiration fraction \\
+$\text{CN}_u$ & = & upstream pool [mol/m$^3$] \\
+$\text{CN}_d$ & = & downstream pool [mol/m$^3$] \\
+$\text{CO}_2$ & = & [mol/m$^3$] \\
+$\text{N}_\text{mineral}$ & = &mineral nitrogen [mol/m$^3$] \\
+$u$ & = & molecular weight ratio of C and N divided by upstream pool C/N [-]\\
+$d$ & = & molecular weight ratio of C and N divided by downstream pool C/N [-]\\
+$f$ & = & respiration fraction [-] \\
 $n$ & = & $[u - (1 - f)d]$
 \end{tabular}
 
@@ -90,27 +90,28 @@ u_i = \text{LitiN}/\text{LitiC}
 \subsubsection{General}
 \begin{equation}
 \label{clmcn_rate}
-rate = R = f_T f_\Psi f_\text{N} k \text{CN}_u
+R = f_T f_\Psi f_\text{N} k \text{CN}_u
 \end{equation}
 
 \begin{align*}
+R &= \text{rate [mol/(m}^3\text{s)]} \\
 f_T & = \exp\left[308.56 \left(\frac{1}{71.02}-\frac{1}{T - 227.13}\right)\right]\\
 f_\Psi & = \frac{\log\left(\Psi_\text{min}/\Psi\right)}{\log\left(\Psi_\text{min}/\Psi_\text{max}\right)}\\
-f_\text{pi} & = \frac{\text{N}_\text{mineral}}{\text{N}_\text{mineral} + k_{\text{N}_\text{mineral}}} \text{if u } \\
-k & = \text{kinetic rate constant} [s^{-1}]\\
-T & = \text{temperature } [K] \\
-\Psi & = \text{soil water potential} [MPa] \\
-\text{CN}_u & = \text{upstream carbon pool } [\text{mol C}/m^3] \\
-\text{N}_\text{mineral} & = \text{nitrogen concentration } [\text{mol N}/m^3] \\
-k_\text{N} & = \text{Mineral N half saturation constant } [\text{mol N}/m^3]\\
+f_\text{N} & = \frac{\text{N}_\text{mineral}}{\text{N}_\text{mineral} + k_{\text{N}_\text{mineral}}} (\text{if u} < 0) \\
+k & = \text{kinetic rate constant} [\text{s}^{-1}]\\
+T & = \text{temperature } [\text{K}] \\
+\Psi & = \text{soil water potential} [\text{Pa}] \\
+\text{CN}_u & = \text{upstream carbon pool } [\text{mol/m}^3] \\
+\text{N}_\text{mineral} & = \text{nitrogen concentration } [\text{mol/m}^3] \\
+k_\text{N} & = \text{Mineral N half saturation constant } [\text{mol/m}^3]\\
 \end{align*}
 
 For the general reaction \ref{rxnclmcn}, 
 \begin{align*}
-\frac{\partial \text{CN}_u}{\partial t} & = -rate \\
-\frac{\partial \text{CN}_d}{\partial t} & = \left(1-f\right) rate \\
-\frac{\partial \text{CO}_2}{\partial t} & = f \cdot rate \\
-\frac{\partial \text{N}_\text{mineral}}{\partial t} & = n \cdot rate \\
+\frac{\partial \text{CN}_u}{\partial t} & = -R \\
+\frac{\partial \text{CN}_d}{\partial t} & = \left(1-f\right) R \\
+\frac{\partial \text{CO}_2}{\partial t} & = f R \\
+\frac{\partial \text{N}_\text{mineral}}{\partial t} & = nR \\
 \end{align*}
 
 \subsubsection{Rates}
@@ -124,7 +125,7 @@ R_6 = f_T f_\theta f_\text{N} k_6 \text{SOM3} \\
 R_7 = f_T f_\theta f_\text{N} k_7 \text{SOM4}
 \end{align*}
 
-\subsubsection{Ordinary Differential Equations}
+\subsubsection{Mass Conservation}
 \begin{align*}
 \frac{\partial}{\partial t} \left(\text{Lit1C}\right) & =  -R_1 \\
 \frac{\partial}{\partial t} \left(\text{Lit1N}\right) & =  -u_1 R_1\\
@@ -156,19 +157,40 @@ Implicit time discretization:
 \frac{\Delta V}{\Delta t} \left(x^{k+1} - x^k\right) = - \sum R_j^{k+1} \Delta V
 \end{equation}
 
-Residual equation:
+Residual:
 \begin{equation}
-\mathcal{R}_\text{x} = \frac{\Delta V}{\Delta t} \left(x^{k+1} - x^k\right)  + \sum R_i^{k+1} \Delta V
+\mathcal{R} = \frac{\Delta V}{\Delta t} \left(x^{k+1} - x^k\right)  + \sum R_i^{k+1} \Delta V
 \end{equation}
+
+Jacobian:
+\begin{equation}
+\mathcal{J} =\frac{\partial \mathcal{R}}{\partial x}
+\end{equation}
+
 
 Newton-Raphson Method:
 \begin{equation}
-\mathcal{J} \delta x = -\mathcal{R}_x
+\mathcal{J} \delta x = -\mathcal{R}
 \end{equation}
 
 \begin{equation}
 x^{k+1,i+1} = x^{k+1,i}+ \delta x
 \end{equation}
+
+\begin{table}[h]
+\caption{Units for residuals and Jacobian}
+\begin{center}
+\begin{tabular}{ccccc}
+                             & aqueous species & immobile species & mixed\\
+$x$                      &  mol/L      & mol/m$^3$ &   \\               
+$\Delta V$          &  L   & m$^3$  & L \\
+$R$                     &  mol/Ls & mol/m$^3$s  & mol/Ls \\
+$\mathcal{R}$   & mol/s       & mol/s & mol/s \\ 
+$\mathcal{J}$    & L/s & m$^3$/s & \\
+\end{tabular}
+\end{center}
+\label{units}
+\end{table}
 
 \subsubsection{Implementation}
 The source code reaction\_sandbox\_clm\_cn.F90 implements CLM-CN with input file like the following: 
@@ -485,6 +507,17 @@ end subroutine CH4OReact
 R =  k \text{C}_\text{bio} \frac{\text{Ac}^-}{k_\text{Ac} + \text{Ac}^-}  f_T f_\Psi
 \end{equation}
 
+\subsection{Mass Conservation}
+\begin{align*}
+\frac{\partial \text{Ac}^-}{\partial t} & = -(1 + \frac{y}{2})R \\
+\frac{\partial \text{H}^+}{\partial t} & = -\frac{y}{2}R \\
+\frac{\partial \text{CH}_4}{\partial t} & = R \\
+\frac{\partial \text{HCO}_3^-}{\partial t} & = R \\
+\frac{\partial \text{C}_\text{bio}}{\partial t} & = 1000\theta y R \\
+\end{align*}
+
+Note: for the last equation, PFLOTRAN accounts for the $1000\theta$ internally.
+
 \subsection{Residuals}
 \begin{align*}
 \mathcal{R}_{\text{Ac-}} & = \frac{\Delta V}{\Delta t} \left(\text{Ac}^{-k+1} - \text{Ac}^{-k}\right)  + (1+y/2) R^{k+1} \Delta V \\
@@ -514,6 +547,107 @@ R =  k \text{C}_\text{bio} \frac{\text{Ac}^-}{k_\text{Ac} + \text{Ac}^-}  f_T f_
   H$^+$               &$0.5yR'_a$  &  0 &$0.5yR'_b$     &0 &0
 \end{tabular}
 \end{table}
+
+\subsection{Application}
+
+\noindent Input
+\begin{verbatim}
+CHEMISTRY
+  PRIMARY_SPECIES
+    Acetate-
+    Methane(aq)
+    H+
+    HCO3-
+  /
+  SECONDARY_SPECIES
+    OH-
+    CO3--
+    CO2(aq)
+:    Acetic_acid(aq)
+  /
+  REDOX_SPECIES
+    Acetate-
+    Methane(aq)
+  /
+  IMMOBILE_SPECIES
+    Acemeg
+  /
+  REACTION_SANDBOX
+     AceMeg
+      RATE_CONSTANT      1.0d-6
+      HALFSATURATIONAC   1.0d-5
+      YIELDCOEFFICIENT   0.02
+     /
+  /
+  DATABASE ../../pflotran-clm4me/database/hanford.dat
+/end{verbatim}
+
+\noindent Code
+\begin{verbatim} 
+  L_water = porosity*global_auxvar%sat(iphase)*volume*1.d3
+  c_ac = rt_auxvar%pri_molal(this%is_ac)
+  c_bio = rt_auxvar%immobile(this%ispec_id_cbio)
+
+  rate = this%rate_constant * L_water * &
+    c_bio * c_ac/(this%kmac + c_ac) * F_t * F_theta
+
+  ! alway subtract contribution from residual (mole/sec)
+  Residual(this%is_ac) = Residual(this%is_ac) + (1.0 + 0.5 * this%yield) * rate
+  Residual(this%is_ch4) = Residual(this%is_ch4) - rate
+  Residual(this%is_cbio) = Residual(this%is_cbio) - this%yield * rate
+  Residual(this%is_hco3) = Residual(this%is_hco3) - rate
+  Residual(this%is_h) = Residual(this%is_h) + 0.5 * this%yield * rate
+
+  if (compute_derivative) then
+
+! 11. If using an analytical Jacobian, add code for Jacobian evaluation
+
+    ! always add contribution to Jacobian
+    ! units = (mol/sec)*(kg water/mol) = kg water/sec
+
+    drate_dac = rate * this%kmac / c_ac / (this%kmac + c_ac)
+    drate_dcb = rate / c_bio
+
+    Jacobian(this%is_ac,  this%is_ac)   = Jacobian(this%is_ac,this%is_ac)   &
+                                        - (1.0 + 0.5 * this%yield) * drate_dac
+    Jacobian(this%is_ch4, this%is_ac)   = Jacobian(this%is_ch4,this%is_ac)  &
+                                        + drate_dac
+    Jacobian(this%is_cbio,this%is_ac)   = Jacobian(this%is_cbio,this%is_ac) &
+                                        + this%yield * drate_dac
+    Jacobian(this%is_hco3,this%is_ac)   = Jacobian(this%is_hco3,this%is_ac) &
+                                        + 0.5 * this%yield * drate_dac
+    Jacobian(this%is_ac,  this%is_cbio) = Jacobian(this%is_ac,this%is_cbio) &
+                                        - (1.0 + 0.5 * this%yield) * drate_dcb
+    Jacobian(this%is_ch4, this%is_cbio) = Jacobian(this%is_ch4,this%is_cbio) &
+                                        + drate_dcb
+    Jacobian(this%is_cbio,this%is_cbio) = Jacobian(this%is_cbio,this%is_cbio) &
+                                        + this%yield * drate_dcb
+    Jacobian(this%is_hco3,this%is_cbio) = Jacobian(this%is_hco3,this%is_cbio) &
+                                        + 0.5 * this%yield * drate_dcb
+
+  endif
+\end{verbatim}
+
+
+For  $k_{Ac} = 0$, 
+\begin{align*}
+\frac{\partial \text{Ac}}{\partial t} &= -(1 + 0.5y) k \text{C}_\text{bio} \\
+\frac{\partial \text{C}_\text{bio}}{\partial t} &= 1000\theta y k \text{C}_\text{bio} \\
+\end{align*}
+
+\begin{align*}
+\text{C}_\text{bio} &= \text{C}_\text{bio,0} \text{EXP}(1000\theta ykt) \\
+\text{Ac} &= \text{Ac}_0 - \frac{1+0.5y}{1000\theta y}\text{C}_\text{bio,0} \text{EXP}(1000\theta ykt)  \\
+\end{align*}
+
+This analytical solution is used in the following figure to check the numerical solution. Note $\text{C}_\text{bio}$ is supposed to stop increasing when acetate is exhausted. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1.0\textwidth]{../acemeg/fig.pdf}
+\caption{Example calculation for acetoclastic methanogenesis: }
+\label{Fig4}
+\end{figure}
 
 
 
