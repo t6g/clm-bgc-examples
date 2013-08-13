@@ -30,7 +30,7 @@ CHEMISTRY
     H+
   /
   IMMOBILE_SPECIES
-    Acemeg
+    Acmeg
     H2meg
   /
 
@@ -44,7 +44,7 @@ CHEMISTRY
     REACTION Acetate- + H2O <-> Methane(aq) + HCO3- 
     RATE_CONSTANT     1.0d-6
     MONOD Acetate-    1.0d-5
-    BIOMASS           Acemeg 0.01
+    BIOMASS           Acmeg 0.01
   /
 
   MICROBIAL_REACTION
@@ -137,7 +137,7 @@ CONSTRAINT initial
     Na+          5.0d-3 Z
   /
   IMMOBILE
-    Acemeg       1.0d-5
+    Acmeg       1.0d-5
     H2meg        1.0d-7
   /
 END
