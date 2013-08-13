@@ -649,6 +649,101 @@ This analytical solution is used in the following figure to check the numerical 
 \label{Fig4}
 \end{figure}
 
+\clearpage
+\section{Generalization}
+If we implement a number of general reactions and rate formulae in PFLOTRAN, we can add as many specific reactions with specific parameter values in the input file. By doing this, we do not have to change the source code or develop a new reaction\_sandbox. For example, if we consider decomposition of LabileC as a first order decay to produce acetate and H$_2$, which are used by methanogens to produce methane using the following reactions:
+
+LabileC = $\frac{1}{3}$ Acetate$^-$ + $\frac{1}{3}$ HCO$_3^-$ + $\frac{1}{9}$ H$_2$ + $\frac{2}{3}$ H$^+$
+
+Acetate$^-$ + H$_2$O = Methane + HCO$_3^-$
+
+H$_2$ + $\frac{1}{4}$ HCO$_3^-$ + $\frac{1}{4}$  H$^+$ = $\frac{1}{4}$ Methane + $\frac{3}{4}$ H$_2$O
+
+We can use the GENERAL\_REACTION and MICROBIAL\_REACTION functions in PFLOTRAN to specify the reactions and parameter values as follow:
+
+\begin{verbatim}
+CHEMISTRY
+  PRIMARY_SPECIES
+    A(aq)
+    Acetate-
+    H2(aq)
+    H+
+    HCO3-
+    Methane(aq)
+    Na+
+  /
+  SECONDARY_SPECIES
+    OH-
+    CO3--
+    CO2(aq)
+:    Acetic_acid(aq)
+  /
+  REDOX_SPECIES
+    Acetate-
+    Methane(aq)
+    H2(aq)
+    H+
+  /
+  IMMOBILE_SPECIES
+    Acmeg
+    H2meg
+  /
+
+  GENERAL_REACTION
+    REACTION A(aq) <-> 0.3333 Acetate- + 0.3333 HCO3- + 0.1111 H2(aq) + 0.6666 H+
+    FORWARD_RATE 1.3889d-5  ! 1/s  
+    BACKWARD_RATE 0.d0
+  /
+
+  MICROBIAL_REACTION
+    REACTION Acetate- + H2O <-> Methane(aq) + HCO3-
+    RATE_CONSTANT     1.0d-6
+    MONOD Acetate-    1.0d-5
+    BIOMASS           Acmeg 0.01
+  /
+
+  MICROBIAL_REACTION
+    REACTION H2(aq) + 0.25 HCO3- + 0.25 H+ <-> 0.25 Methane(aq) + 0.75 H2O
+    RATE_CONSTANT     1.0d-5
+    MONOD H2(aq)      1.0d-7
+    BIOMASS           H2meg 0.02
+  /
+
+  DATABASE ../../pflotran-clm4me/database/hanford.dat
+\end{verbatim}
+
+With initial conditions as follow,
+
+\begin{verbatim}
+CONSTRAINT initial
+  CONCENTRATIONS
+    A(aq)         0.001 T
+    Acetate-    1.0d-10 T
+    H2(aq)      1.0d-10 T
+    H+              7.0 pH   
+    HCO3-        5.0d-3 T
+    Methane(aq) 1.0d-10 T
+    Na+          5.0d-3 Z
+  /
+  IMMOBILE
+    Acemeg       1.0d-5
+    H2meg        1.0d-7
+  /
+END
+\end{verbatim}
+
+PFLOTRAN will give results like in the following figure. The point is that we can add many reactions in the input file.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1.0\textwidth]{../microbial/comp.pdf}
+\caption{Example calculation for multiple microbial reactions}
+\label{Fig5}
+\end{figure}
+
+
+
+
 
 
 \clearpage
