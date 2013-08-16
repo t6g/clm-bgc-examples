@@ -650,8 +650,8 @@ This analytical solution is used in the following figure to check the numerical 
 \end{figure}
 
 \clearpage
-\section{Generalization}
-If we implement a number of general reactions and rate formulae in PFLOTRAN, we can add as many specific reactions with specific parameter values in the input file. By doing this, we do not have to change the source code or develop a new reaction\_sandbox. For example, if we consider decomposition of LabileC as a first order decay to produce acetate and H$_2$, which are used by methanogens to produce methane using the following reactions:
+\section{A General Example}
+If we implement a number of general reactions and rate formulae in PFLOTRAN, we can add as many specific reactions with specific parameter values in the input file. By doing this, we do not have to change the source code or develop a new reaction\_sandbox for each specific case. For example, if we consider decomposition of LabileC as a first order decay to produce acetate and H$_2$, which are used by methanogens to produce methane using the following reactions:
 
 LabileC = $\frac{1}{3}$ Acetate$^-$ + $\frac{1}{3}$ HCO$_3^-$ + $\frac{1}{9}$ H$_2$ + $\frac{2}{3}$ H$^+$
 
@@ -741,7 +741,91 @@ PFLOTRAN will give results like in the following figure. The point is that we ca
 \label{Fig5}
 \end{figure}
 
+\clearpage
+\section{CLM-CNP}
+Starting from CLM-CN, CLM-CNP provides options to
+\begin{enumerate}
+\item add microbial, enzyme, and DOC pools
+\item allow variable C:N:P ratios in all of the pools
+\item use Monod, Machielis-Menten and other rate models
+\item specify immobile or mobile pools/species
+\end{enumerate}
 
+through an input file. It reduces to CLM-CN if none of the additional features is specified in the input file. These added features can be added incrementally. Sorption, and other geochemical processes can be added separately (outside of the CLM-CNP reaction\_sandbox).
+
+
+
+
+
+\subsection{C}
+\subsubsection{Reaction}
+\begin{equation}
+\label{rxnc}
+\text{C}_u \rightarrow c_m\text{C}_m + c_b\text{C}_b + c_e \text{C}_e + c_d \text{C}_d
+\end{equation}
+
+The subscript $u$, $m$, $b$, $e$, and $d$ denote upstream, mineral, bacterial, enzyme, and downstream pools. To balance the reaction, $c_m + c_b + c_e + c_d = 1$. $c_b$ and $c_e$ can be variable in the future.
+
+For CLM-CN, $c_m$ is the respiration fraction $f$, $c_d = 1 - f$, and $c_b = c_e = 0$.
+
+To incorporate microbial pools with Monod rate, $c_b \neq 0$.
+
+To use Michaelis-Menten rate, $c_e \neq 0$
+
+\subsubsection{Rate}
+\begin{equation}
+\label{ratec}
+\frac{d[\text{C}_u]}{dt} = -R = -k \prod f([\text{C}_i]) f(pH)f(\psi)f(T)
+\end{equation}
+
+$[\text{C}_i]$ is the concentration of C$_i$. $k$ is the rate coefficient. function $f([\text{C}_i])$, $f(pH)$, $f(\psi)$, and $f(T)$ account for influence of $\text{C}_i$, pH, moisture, and temperature on the reaction rate. $\text{C}_i$ can be any component in or not in Eq. (\ref{rxnc}). We consider four options for $f([\text{C}_i])$:
+
+\begin{tabular}{llll}
+$f([\text{C}_i]) = 1$ & default \\
+$f([\text{C}_i]) = [\text{C}_i]$ & first order \\
+$f([\text{C}_i]) = [\text{C}_i]/(K_{Ci} + [\text{C}_i])$ & substrate/electron donor or electron acceptor limitation \\
+$f([\text{C}_i]) = I_{Ci}/(I_{Ci} + [\text{C}_i])$ & inhibition \\
+\end{tabular}
+
+For CLM-CN, $f([\text{C}_u])=[\text{C}_u]$,  $f([\text{C}_m])=f([\text{C}_b])=f([\text{C}_d]) = 1$.
+
+To incorporate microbial pools without Monod rate, $f([\text{C}_u])=[\text{C}_u]/(K_{C_u}+[\text{C}_u])$, $f([\text{C}_b])=[\text{C}_b]$,  $f([\text{C}_m])=f([\text{C}_d]) = 1$.
+
+To use Michaelis-Menten rate, $f([\text{C}_u])=[\text{C}_u]/(K_{C_u}+[\text{C}_u])$, $f([\text{C}_e])=[\text{C}_e]$,  $f([\text{C}_m])=f([\text{C}_d]) = f([\text{C}_b])= 1$.
+
+\subsection{N}
+\subsubsection{Reaction}
+\begin{equation}
+n_u \text{N}_u \rightarrow n_m \text{N}_m + n_b \text{N}_b + n_e \text{N}_e + n_d \text{N}_d
+\end{equation}
+
+\begin{equation}
+n_m + n_b + n_e + n_d = n_u
+\end{equation}
+
+$n_u = [\text{N}_u]/[\text{C}_u]$, $n_b = [\text{N}_b]/[\text{C}_b]$, $n_e = [\text{N}_e]/[\text{C}_e]$, and $n_d = [\text{N}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $n_m > 0$, this decomposition reaction produces mineral N (mineralization). Otherwise, the reaction takes up mineral N (immobilization). In the late case, a $f([\text{N}_m])=[\text{N}_m]/(K_{Nm}+[\text{N}_m])$ term is added tothe decomposition rate in Eq. (\ref{ratec}).
+\subsubsection{Rate}
+\begin{equation}
+-\frac{1}{n_u}\frac{\partial [\text{N}_u]}{\partial t} = \frac{1}{n_m}\frac{\partial [\text{N}_m]}{\partial t} = \frac{1}{n_b} \frac{\partial [\text{N}_b]}{\partial t} = \frac{1}{n_e} \frac{\partial [\text{N}_e]}{\partial t} = \frac{1}{n_d}\frac{\partial [\text{N}_d]}{\partial t}
+\end{equation}
+
+\subsection{P}
+\subsubsection{Reaction}
+\begin{equation}
+p_u \text{P}_u \rightarrow p_m \text{P}_m + p_b \text{P}_b + p_e \text{P}_e + p_d \text{P}_d
+\end{equation}
+
+\begin{equation}
+p_m + p_b + p_e + p_d = p_u
+\end{equation}
+
+$p_u = [\text{P}_u]/[\text{C}_u]$, $p_b = [\text{P}_b]/[\text{C}_b]$, $p_e = [\text{P}_e]/[\text{C}_e]$, and $p_d = [\text{P}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $p_m > 0$, this decomposition reaction produces mineral P (mineralization). Otherwise, the reaction takes up mineral P (immobilization). In the late case, a $f([\text{P}_m])=[\text{P}_m]/(K_{Pm}+[\text{P}_m])$ term is added tothe decomposition rate in Eq. (\ref{ratec}).
+\subsubsection{Rate}
+\begin{equation}
+-\frac{1}{p_u}\frac{\partial [\text{P}_u]}{\partial t} = \frac{1}{p_m}\frac{\partial [\text{P}_m]}{\partial t} = \frac{1}{p_b} \frac{\partial [\text{P}_b]}{\partial t} = \frac{1}{p_e} \frac{\partial [\text{P}_e]}{\partial t} = \frac{1}{p_d}\frac{\partial [\text{P}_d]}{\partial t}
+\end{equation}
+
+:wq
 
 
 
