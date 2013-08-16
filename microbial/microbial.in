@@ -1,0 +1,158 @@
+:Description: Batch CLM-CN simulation
+: Rate constants, C/N ratios, respiration fractions from Bonan et al., 2012
+
+:=========================== useful tranport parameters ==================
+UNIFORM_VELOCITY 0.d0 0.d0 0.d0 
+
+REFERENCE_DENSITY 1.d3
+
+:=========================== chemistry ========================================
+CHEMISTRY
+  PRIMARY_SPECIES
+    A(aq)
+    Acetate-
+    H2(aq)
+    H+
+    HCO3-    
+    Methane(aq)
+    Na+
+  /
+  SECONDARY_SPECIES
+    OH-
+    CO3--
+    CO2(aq)
+:    Acetic_acid(aq) 
+  /
+  REDOX_SPECIES
+    Acetate-
+    Methane(aq)
+    H2(aq)
+    H+
+  /
+  IMMOBILE_SPECIES
+    Acemeg
+    H2meg
+  /
+
+  GENERAL_REACTION
+    REACTION A(aq) <-> 0.333333 Acetate- + 0.333333 HCO3- + 0.111111 H2(aq) + 0.666666 H+
+    FORWARD_RATE 1.3889d-5  ! 1/s  0.05 1/h
+    BACKWARD_RATE 0.d0
+  /
+
+  MICROBIAL_REACTION
+    REACTION Acetate- + H2O <-> Methane(aq) + HCO3- 
+    RATE_CONSTANT     1.0d-6
+    MONOD Acetate-    1.0d-5
+    BIOMASS           Acemeg 0.01
+  /
+
+  MICROBIAL_REACTION
+    REACTION H2(aq) + 0.25 HCO3- + 0.25 H+ <-> 0.25 Methane(aq) + 0.75 H2O 
+    RATE_CONSTANT     1.0d-5
+    MONOD H2(aq)      1.0d-7
+    BIOMASS           H2meg 0.02
+  /
+
+  DATABASE ../../pflotran-clm4me/database/hanford.dat
+  OUTPUT
+    all
+  /
+END
+
+:=========================== solver options ===================================
+LINEAR_SOLVER TRANSPORT
+  SOLVER DIRECT
+END
+
+:=========================== discretization ===================================
+GRID
+  TYPE structured
+  NXYZ 1 1 1
+  BOUNDS
+    0.d0 1.d0
+    0.d0 1.d0
+    0.d0 1.d0
+  /
+END
+
+:=========================== fluid properties =================================
+FLUID_PROPERTY 
+  DIFFUSION_COEFFICIENT 1.d-9
+END
+
+:=========================== material properties ==============================
+MATERIAL_PROPERTY soil1
+  ID 1
+  POROSITY 0.25d0
+  TORTUOSITY 1.d0
+END
+
+:=========================== output options ===================================
+OUTPUT
+  PERIODIC_OBSERVATION TIMESTEP 1
+END
+
+:=========================== times ============================================
+TIME
+  FINAL_TIME 30.d0 d
+  INITIAL_TIMESTEP_SIZE 1.d-2 h
+  MAXIMUM_TIMESTEP_SIZE 1.d-1 d
+END
+
+:=========================== regions ==========================================
+REGION all
+  COORDINATES
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
+  /
+END
+
+REGION obs_pt
+  COORDINATE 0.5 0.5 0.5
+END
+
+:=========================== observation points ===============================
+OBSERVATION
+  REGION obs_pt
+END
+
+:=========================== transport conditions =============================
+TRANSPORT_CONDITION initial
+  TYPE zero_gradient
+  CONSTRAINT_LIST
+    0.d0 initial
+  /
+END
+
+:=========================== transport constraints ============================
+CONSTRAINT initial
+  CONCENTRATIONS
+    A(aq)         0.001 T
+    Acetate-    1.0d-10 T
+    H2(aq)      1.0d-10 T 
+    H+              7.0 pH    
+    HCO3-        5.0d-3 T 
+    Methane(aq) 1.0d-10 T
+    Na+          5.0d-3 Z
+  /
+  IMMOBILE
+    Acemeg       1.0d-5
+    H2meg        1.0d-7
+  /
+END
+
+:=========================== condition couplers ===============================
+: initial condition
+INITIAL_CONDITION
+  TRANSPORT_CONDITION initial
+  REGION all
+END
+
+:=========================== stratigraphy couplers ============================
+STRATA
+  REGION all
+  MATERIAL soil1
+END
+
+
