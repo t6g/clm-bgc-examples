@@ -1,0 +1,485 @@
+\documentclass{beamer}
+
+\usepackage{comment}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{multicol}
+\usepackage{booktabs}
+\definecolor{green}{RGB}{0,128,0}
+
+\def\EQ#1\EN{\begin{equation*}#1\end{equation*}}
+\def\BA#1\EA{\begin{align*}#1\end{align*}}
+\def\BS#1\ES{\begin{split*}#1\end{split*}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\eq}{\ =\ }
+\newcommand{\degc}{$^\circ$C}
+
+\def\p{\partial}
+\def\qbs{\boldsymbol{q}}
+\def\Dbs{\boldsymbol{D}}
+\def\A{\mathcal A}
+\def\gC{\mathcal C}
+\def\gD{\mathcal D}
+\def\gL{\mathcal L}
+\def\M{\mathcal M}
+\def\P{\mathcal P}
+\def\Q{\mathcal Q}
+\def\gR{\mathcal R}
+\def\gS{\mathcal S}
+\def\X{\mathcal X}
+\def\bnabla{\boldsymbol{\nabla}}
+\def\bnu{\boldsymbol{\nu}}
+\renewcommand{\a}{{\alpha}}
+%\renewcommand{\a}{{}}
+\newcommand{\s}{{\sigma}}
+\newcommand{\bq}{\boldsymbol{q}}
+\newcommand{\bz}{\boldsymbol{z}}
+\def\bPsi{\boldsymbol{\Psi}}
+
+\def\Li{\textit{L}}
+\def\Fb{\textbf{f}}
+\def\Jb{\textbf{J}}
+\def\cb{\textbf{c}}
+
+\def\Dt{\Delta t}
+\def\tpdt{{t + \Delta t}}
+\def\bpsi{\boldsymbol{\psi}}
+\def\dbpsi{\delta \boldsymbol{\psi}}
+\def\bc{\textbf{c}}
+\def\bx{\textbf{x}}
+\def\dbc{\delta \textbf{c}}
+\def\dbx{\delta \textbf{x}}
+\def\arrows{\rightleftharpoons}
+
+\newcommand{\bGamma}{\boldsymbol{\Gamma}}
+\newcommand{\bOmega}{\boldsymbol{\Omega}}
+%\newcommand{\bPsi}{\boldsymbol{\Psi}}
+%\newcommand{\bpsi}{\boldsymbol{\psi}}
+\newcommand{\bO}{\boldsymbol{O}}
+%\newcommand{\bnu}{\boldsymbol{\nu}}
+\newcommand{\bdS}{\boldsymbol{dS}}
+\newcommand{\bg}{\boldsymbol{g}}
+\newcommand{\bk}{\boldsymbol{k}}
+%\newcommand{\bq}{\boldsymbol{q}}
+\newcommand{\br}{\boldsymbol{r}}
+\newcommand{\bR}{\boldsymbol{R}}
+\newcommand{\bS}{\boldsymbol{S}}
+\newcommand{\bu}{\boldsymbol{u}}
+\newcommand{\bv}{\boldsymbol{v}}
+%\newcommand{\bz}{\boldsymbol{z}}
+\newcommand{\pressure}{P}
+
+\newcommand\gehcomment[1]{{{\color{orange} #1}}}
+\newcommand\add[1]{{{\color{blue} #1}}}
+\newcommand\remove[1]{\sout{{\color{red} #1}}}
+\newcommand\codecomment[1]{{{\color{green} #1}}}
+\newcommand\redcomment[1]{{{\color{red} #1}}}
+\newcommand\bluecomment[1]{{{\color{blue} #1}}}
+\newcommand\greencomment[1]{{{\color{green} #1}}}
+\newcommand\magentacomment[1]{{{\color{magenta} #1}}}
+
+\begin{comment}
+\tiny
+\scriptsize
+\footnotesize
+\small
+\normalsize
+\large
+\Large
+\LARGE
+\huge
+\Huge
+\end{comment}
+
+\begin{document}
+\title{CLM-CNP: Reaction Sandbox for General Litter and Organic Matter Decomposition}
+\author{Guoping Tang}
+\date{\today}
+
+\frame{\titlepage}
+
+%-----------------------------------------------------------------------------
+\section{General Decomposition}
+
+\subsection{Reaction}
+
+\frame{
+\frametitle{General Decomposition Reaction}
+\LARGE
+\EQ
+\label{CNP_rxn}
+\text{Upstream pool} \rightarrow \text{Downstream pools}
+\EN
+\small
+\begin{itemize}
+\item Pool can be litter, soil organic matter, microbial mass, enzyme, ...
+\item Each pool has C, N and P are optional (e.g., Lit1 can have Lit1C, Lit1N, Lit1P)
+\item Fixed or variable CN or CP ratio
+\end{itemize}
+}
+
+%-----------------------------------------------------------------------------
+\subsection{Rate}
+\frame{\frametitle{General Decomposition Rate}
+\LARGE
+\EQ\label{rate}
+R \eq k \prod f(\text{C}_i) f_\text{E}
+\EN
+\small
+\centering
+\begin{tabular}{ ll}
+First order & $f(\text{C}_i) \eq \text{C}_i$ \\
+Monod & $f(\text{C}_i) \eq \frac{\text{C}_i}{K_\text{Ci} + \text{C}_i}$ \\
+Inhibition & $f(\text{C}_i) \eq \frac{I_\text{Ci}}{I_\text{Ci} + \text{C}_i}$ \\
+\end{tabular}
+\EQ
+f_\text{E} \eq f(\text{T}) f(\psi) f(\text{N}) f(\text{pH})
+\EN
+}
+
+\begin{frame}[fragile]
+\frametitle{Example 1. First Order}
+\EQ
+\text{Lit1} \rightarrow 0.61\: \text{SOM1} + 0.39 \: \text{C}
+\EN
+
+\small
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    SOM1
+    Lit1
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+       CPOOL Lit1
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+     /
+     FIRSTORDER Lit1
+     RATE_CONSTANT 0.7 1/d 
+    /
+  /
+\end{verbatim}  
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example 2. First Order with N}
+\EQ
+\text{Lit1C} + u\: \text{Lit1N} + v\: \text{N} \rightarrow 0.61\: \text{SOM1} + 0.39 \: \text{C}
+\EN
+\tiny
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    N
+    Lit1C
+    Lit1N
+    SOM1
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1C
+        NPOOL Lit1N
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+        CNRATIO 12.d0
+      /
+     FIRSTORDER Lit1C
+     RATE_CONSTANT 0.7 1/d 
+    /
+  /
+\end{verbatim}  
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example 3. First Order with N and P}
+\EQ
+\text{Lit1C} + u\: \text{Lit1N} + v\: \text{Lit1P} + w\: \text{N} + x\: \text{P} \rightarrow 0.61\: \text{SOM1} + 0.39 \: \text{C}
+\EN
+\tiny
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    N
+    P
+    Lit1C
+    Lit1N
+    Lit1P
+    SOM1
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1C
+        NPOOL Lit1N
+        PPOOL Lit1P
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+        CNRATIO 12.d0
+        CPRATIO 350.d0
+      /
+     FIRSTORDER Lit1C
+     RATE_CONSTANT 0.7 1/d 
+    /
+  /
+\end{verbatim}  
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example 4. Monod}
+\EQ
+\text{Lit1} \rightarrow 0.56\: \text{SOM1} + 0.05 \: \text{MBC} + 0.39 \: \text{C}
+\EN
+
+\tiny
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    SOM1
+    Lit1
+    MBC
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.56
+      /
+      DOWNSTREAM
+        CPOOL MBC  0.05
+      /
+     FIRSTORDER MBC
+     MONOD Lit1 1.0d-4
+     RATE_CONSTANT 7.0 1/d 
+    /
+  /
+\end{verbatim}  
+\end{frame}
+\begin{frame}[fragile]
+\frametitle{Example 5. Michaelis-Menten}
+\EQ
+\text{Lit1} \rightarrow 0.56\: \text{SOM1} + 0.04 \: \text{MBC} + 0.01 \: \text{Enzyme} + 0.39 \: \text{C}
+\EN
+
+\tiny
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    SOM1
+    Lit1
+    MBC
+    Enzyme
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.56
+      /
+      DOWNSTREAM
+        CPOOL MBC  0.04
+      /
+      DOWNSTREAM
+        CPOOL Enzyme  0.01
+      /
+     FIRSTORDER Enzyme
+     MONOD Lit1 1.0d-4
+     RATE_CONSTANT 7.0 1/d 
+    /
+  /
+\end{verbatim}  
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Example 6. CLM-CN without N}
+
+\tiny
+\begin{columns}
+\column{1.5in}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    Lit1
+    Lit2
+    Lit3
+    SOM1
+    SOM2
+    SOM3
+    SOM4
+    SOMD
+  /
+  REACTION_SANDBOX
+: Lit1 -> 0.61 SOM1 + 0.39 CO2 
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+      /
+     FIRSTORDER Lit1
+     RATE_CONSTANT 0.7 1/d 
+    /
+: Lit2 -> 0.45 SOM2 + 0.55 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit2
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.45
+     /
+    FIRSTORDER Lit2
+    RATE_CONSTANT 0.07 1/d 
+   /
+\end{verbatim}  
+\column{1.5in}
+\begin{verbatim}   
+: Lit3 -> 0.71 SOM3 + 0.29 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit3
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.71
+     /
+    FIRSTORDER Lit3
+    RATE_CONSTANT 0.014 1/d 
+   /
+: SOM1 -> 0.72 SOM2 + 0.28 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM1
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.72
+     /
+    FIRSTORDER SOM1
+    RATE_CONSTANT 0.07 1/d 
+   /
+: SOM2 -> 0.54 SOM3 + 0.46 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM2
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.54
+     /
+    FIRSTORDER SOM2
+    RATE_CONSTANT 0.014 1/d 
+   /
+\end{verbatim}  
+\column{1.5in}
+\begin{verbatim}   
+: SOM3 -> 0.45 SOM4 + 0.55 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM3
+     /
+     DOWNSTREAM
+       CPOOL SOM4 0.45
+     /
+    FIRSTORDER SOM3
+    RATE_CONSTANT 0.0014 1/d 
+   /
+: SOM4 -> 0.39 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM4
+     /
+     DOWNSTREAM
+       CPOOL SOMD 0.0d0
+     /
+    FIRSTORDER SOM4
+    RATE_CONSTANT 0.0001 1/d 
+   /
+  /
+\end{verbatim}  
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example 7. CLM-CN}
+
+\tiny
+\begin{columns}
+\column{1.5in}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    N
+    Lit1C
+    Lit1N
+    Lit2C
+    Lit2N
+    Lit3C
+    Lit3N
+    SOM1
+    SOM2
+    SOM3
+    SOM4
+    SOMD
+  /
+  REACTION_SANDBOX
+: Lit1 -> 0.61 SOM1 + 0.39 CO2 
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1C
+        NPOOL Lit1N
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+        CNRATIO 12.d0
+      /
+     FIRSTORDER Lit1C
+     RATE_CONSTANT 0.7 1/d 
+    /
+    ......
+\end{verbatim}  
+\column{1.5in}
+\begin{verbatim}   
+: SOM1 -> 0.72 SOM2 + 0.28 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM1
+       CNRATIO 12.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.72
+       CNRATIO 12.d0
+     /
+    FIRSTORDER SOM1
+    RATE_CONSTANT 0.07 1/d 
+   /
+......
+: SOM4 -> 0.39 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM4
+       CNRATIO 10.d0
+     /
+     DOWNSTREAM
+       CPOOL SOMD 0.0d0
+       CNRATIO 10.d0
+     /
+    FIRSTORDER SOM4
+    RATE_CONSTANT 0.0001 1/d 
+   /
+  /
+\end{verbatim}  
+\end{columns}
+\end{frame}
+
+\end{document}
