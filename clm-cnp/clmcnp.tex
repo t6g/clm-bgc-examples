@@ -1,0 +1,763 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{natbib}
+\title{Implementation of CLM-CNP in PFLOTRAN}
+%\author{Guoping Tang}
+\date\today{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\section{Introduction}
+Starting from CLM-CN, CLM-CNP provides options to
+\begin{enumerate}
+\item add microbial, enzyme, and DOC pools
+\item allow variable C:N:P ratios in all of the pools
+\item use Monod, Machielis-Menten and other rate models
+\item specify immobile or mobile pools/species
+\end{enumerate}
+
+through an input file. It reduces to CLM-CN if none of the additional features is specified in the input file. These added features can be added incrementally. Sorption, and other geochemical processes can be added separately (outside of the CLM-CNP reaction\_sandbox).
+
+\subsection{C}
+\subsubsection{Reaction}
+\begin{equation}
+\label{rxnc}
+\text{C}_u \rightarrow c_m\text{C}_m + c_b\text{C}_b + c_e \text{C}_e + c_d \text{C}_d
+\end{equation}
+
+or
+
+\begin{equation}
+\text{C}_u \rightarrow \sum c_i\text{C}_i
+\end{equation}
+
+The subscript $u$, $m$, $b$, $e$, and $d$ denote upstream, mineral, bacterial, enzyme, and downstream pools. To balance the reaction, $c_m + c_b + c_e + c_d = 1$. $c_b$ and $c_e$ can be variable in the future.
+
+For CLM-CN, $c_m$ is the respiration fraction $f$, $c_d = 1 - f$, and $c_b = c_e = 0$.
+
+To incorporate microbial pools with Monod rate, $c_b \neq 0$.
+
+To use Michaelis-Menten rate, $c_e \neq 0$
+
+\subsubsection{Rate}
+\begin{equation}
+\label{ratec}
+\frac{d[\text{C}_u]}{dt} = -R = -k \prod f([\text{C}_i]) f(pH)f(\psi)f(T)
+\end{equation}
+
+$[\text{C}_i]$ is the concentration of C$_i$. $k$ is the rate coefficient. function $f([\text{C}_i])$, $f(pH)$, $f(\psi)$, and $f(T)$ account for influence of $\text{C}_i$, pH, moisture, and temperature on the reaction rate. $\text{C}_i$ can be any component in or not in Eq. (\ref{rxnc}). We consider four options for $f([\text{C}_i])$:
+
+\begin{tabular}{llll}
+$f([\text{C}_i]) = 1$ & default \\
+$f([\text{C}_i]) = [\text{C}_i]$ & first order \\
+$f([\text{C}_i]) = [\text{C}_i]/(K_{Ci} + [\text{C}_i])$ & substrate/electron donor or electron acceptor limitation \\
+$f([\text{C}_i]) = I_{Ci}/(I_{Ci} + [\text{C}_i])$ & inhibition \\
+\end{tabular}
+
+For CLM-CN, $f([\text{C}_u])=[\text{C}_u]$,  $f([\text{C}_m])=f([\text{C}_b])=f([\text{C}_d]) = 1$.
+
+To incorporate microbial pools without Monod rate, $f([\text{C}_u])=[\text{C}_u]/(K_{C_u}+[\text{C}_u])$, $f([\text{C}_b])=[\text{C}_b]$,  $f([\text{C}_m])=f([\text{C}_d]) = 1$.
+
+To use Michaelis-Menten rate, $f([\text{C}_u])=[\text{C}_u]/(K_{C_u}+[\text{C}_u])$, $f([\text{C}_e])=[\text{C}_e]$,  $f([\text{C}_m])=f([\text{C}_d]) = f([\text{C}_b])= 1$.
+
+\subsection{N}
+\subsubsection{Reaction}
+\begin{equation}
+n_u \text{N}_u \rightarrow n_m \text{N}_m + n_b \text{N}_b + n_e \text{N}_e + n_d \text{N}_d
+\end{equation}
+
+or
+
+\begin{equation}
+n_u \text{N}_u \rightarrow \sum n_i \text{N}_i
+\end{equation}
+
+\begin{equation}
+n_m + n_b + n_e + n_d = n_u
+\end{equation}
+
+$n_u = [\text{N}_u]/[\text{C}_u]$, $n_b = [\text{N}_b]/[\text{C}_b]$, $n_e = [\text{N}_e]/[\text{C}_e]$, and $n_d = [\text{N}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $n_m > 0$, this decomposition reaction produces mineral N (mineralization). Otherwise, the reaction takes up mineral N (immobilization). In the late case, a $f([\text{N}_m])=[\text{N}_m]/(K_{Nm}+[\text{N}_m])$ term is added tothe decomposition rate in Eq. (\ref{ratec}).
+\subsubsection{Rate}
+\begin{equation}
+-\frac{1}{n_u}\frac{\partial [\text{N}_u]}{\partial t} = \frac{1}{n_m}\frac{\partial [\text{N}_m]}{\partial t} = \frac{1}{n_b} \frac{\partial [\text{N}_b]}{\partial t} = \frac{1}{n_e} \frac{\partial [\text{N}_e]}{\partial t} = \frac{1}{n_d}\frac{\partial [\text{N}_d]}{\partial t}
+\end{equation}
+
+\subsection{P}
+\subsubsection{Reaction}
+\begin{equation}
+p_u \text{P}_u \rightarrow p_m \text{P}_m + p_b \text{P}_b + p_e \text{P}_e + p_d \text{P}_d
+\end{equation}
+
+\begin{equation}
+p_u \text{P}_u \rightarrow \sum p_i \text{P}_i
+\end{equation}
+
+\begin{equation}
+p_m + p_b + p_e + p_d = p_u
+\end{equation}
+
+$p_u = [\text{P}_u]/[\text{C}_u]$, $p_b = [\text{P}_b]/[\text{C}_b]$, $p_e = [\text{P}_e]/[\text{C}_e]$, and $p_d = [\text{P}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $p_m > 0$, this decomposition reaction produces mineral P (mineralization). Otherwise, the reaction takes up mineral P (immobilization). In the late case, a $f([\text{P}_m])=[\text{P}_m]/(K_{Pm}+[\text{P}_m])$ term is added tothe decomposition rate in Eq. (\ref{ratec}).
+\subsubsection{Rate}
+\begin{equation}
+-\frac{1}{p_u}\frac{\partial [\text{P}_u]}{\partial t} = \frac{1}{p_m}\frac{\partial [\text{P}_m]}{\partial t} = \frac{1}{p_b} \frac{\partial [\text{P}_b]}{\partial t} = \frac{1}{p_e} \frac{\partial [\text{P}_e]}{\partial t} = \frac{1}{p_d}\frac{\partial [\text{P}_d]}{\partial t}
+\end{equation}
+
+\subsection{Residuals}
+\begin{align*}
+R_{Cu} &=  -R \\
+R_{Cdi} &=  d_i R \\
+R_{Cm} &=  (1 - d_i) R \\
+R_{Nu} &= -\frac{[\text{N}_u]}{[\text{C}_u]}R \\
+R_{Ndi} &=  \frac{[\text{N}_{di}]}{[\text{C}_{di}]} R \\
+R_{Nm} &=  \left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right) R \\
+R_{Pu} &= -\frac{[\text{P}_u]}{[\text{C}_u]}R \\
+R_{Pdi} &=  \frac{[\text{P}_{di}]}{[\text{C}_{di}]} R \\
+R_{Pm} &=  \left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right) R \\
+\end{align*}
+
+\subsection{Jacobians}
+
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$\\
+  \hline 
+  C$_u$      &$-\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{\partial R}{\partial \text{C}_{di}}$ & 0    & 0 &0 & $-\frac{\partial R}{\partial \text{N}_m}$ & 0 &0 & $-\frac{\partial R}{\partial \text{P}_m}$\\
+  C$_{di}$   & $d_i \frac{\partial R}{\partial \text{C}_u}$ &  $d_i \frac{\partial R}{\partial \text{C}_{di}}$ & 0 &0 &0 & $d_i \frac{\partial R}{\partial \text{N}_m}$ &0 &0 & $d_i \frac{\partial R}{\partial \text{P}_m}$\\
+  C$_m$     &$(1-d_i)\frac{\partial R}{\partial \text{C}_u}$  & $(1-d_i)\frac{\partial R}{\partial \text{C}_{di}}$  & 0  & 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{N}_m}$ & 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{P}_m}$\\
+  N$_u$      &$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u} + \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 & $-\frac{1}{[\text{C}_u]} R$ &0&$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $ &0 &0 & $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
+  N$_{di}$    &$\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0 & $\frac{1}{[\text{C}_{di}]} R$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 0 & 0 & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+  N$_m$    &$\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u} - \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} + \frac{[\text{N}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & $\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & 0 & 0 & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $\\
+  P$_u$      &$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u} + \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 &0 &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m}$ &$-\frac{1}{[\text{C}_u]} R$ &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m}$ \\
+  P$_{di}$    &$\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0 &0&$\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$& 0 & $\frac{1}{[\text{C}_{di}]} R$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+  P$_m$    &$\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u} - \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} + \frac{[\text{P}_{di}]}{[\text{C}_{di}]^2} R$  & 0 &0 &0& $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & $\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $ \\
+  \end{tabular}
+  }
+\end{table}
+
+To use N$_m$/(K$_N$ + N$_m$) term for N-limiting cases ($\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]} < 0$), 
+
+\begin{equation}
+\frac{\partial R}{\partial \text{N}_m} = R \frac{K_N}{(K_N + \text{N}_m)\text{N}_m}
+\end{equation}
+
+because 
+
+\begin{equation}
+\frac{\partial \frac{x}{k+x}}{\partial x} = \frac{k}{(k+x)^2}
+\end{equation}
+
+For the first order rate term,
+\begin{equation}
+\frac{\partial R}{\partial \text{C}_x} = \frac{R}{[\text{C}_x]}
+\end{equation}
+
+For the Monod rate term,
+\begin{equation}
+\frac{\partial R}{\partial \text{C}_x} = R \frac{K_x}{(K_x + [\text{C}_x])[\text{C}_x]}
+\end{equation}
+
+For the inhibition term,
+\begin{equation}
+\frac{\partial R}{\partial \text{C}_x} = -R \frac{K_x}{(K_x + [\text{C}_x])[\text{C}_x]}
+\end{equation}
+
+because 
+
+\begin{equation}
+\frac{\partial \frac{k}{k+x}}{\partial x} = -\frac{k}{(k+x)^2}
+\end{equation}
+
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition (add for each rate term)} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$\\
+  \hline 
+  C$_u$      &$-\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{\partial R}{\partial \text{C}_{di}}$ & 0    & 0 &0 & $-\frac{\partial R}{\partial \text{N}_m}$ & 0 &0 & $-\frac{\partial R}{\partial \text{P}_m}$\\
+  C$_{di}$   & $d_i \frac{\partial R}{\partial \text{C}_u}$ &  $d_i \frac{\partial R}{\partial \text{C}_{di}}$ & 0 &0 &0 & $d_i \frac{\partial R}{\partial \text{N}_m}$&0 &0 & $d_i \frac{\partial R}{\partial \text{P}_m}$\\
+  C$_m$     &$(1-d_i)\frac{\partial R}{\partial \text{C}_u}$  & $(1-d_i)\frac{\partial R}{\partial \text{C}_{di}}$  & 0  & 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{N}_m}$& 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{N}_m}$\\
+  N$_u$      &$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 & 0 &0&$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $& 0 &0&$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
+  N$_{di}$    &$\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}}$  & 0 & 0 & 0  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 0 & 0  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+  N$_m$    &$\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u}$  & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} $  & 0 & 0   & 0 & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{N}_m} $ & 0   & 0 & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{P}_m} $\\
+  P$_u$      &$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 & 0 &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $ & 0 &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
+  P$_{di}$    &$\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}}$  & 0 & 0 & 0  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 0 & 0  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+  P$_m$    &$\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u}$  & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} $  & 0 & 0   & 0 & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{N}_m} $ & 0   & 0 & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{P}_m} $ \\
+  \end{tabular}
+  }
+\end{table}
+
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition (add only once)} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$ \\
+  \hline 
+  C$_u$      &0  & 0 & 0    & 0 &0 & 0 &0&0&0\\
+  C$_{di}$   & 0 &  0 & 0 &0 &0 & 0&0&0&0\\
+  C$_m$     &0  & 0 & 0  & 0 &0 & 0&0&0&0\\
+  N$_u$      &$\frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & 0 & 0 & $-\frac{1}{[\text{C}_u]} R$ &0&0 &0&0&0\\
+  N$_{di}$    &0 & $ - \frac{[\text{N}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0 & $\frac{1}{[\text{C}_{di}]} R$  & 0&0&0&0\\
+  N$_m$    &$- \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & $\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & 0&0&0&0\\
+  P$_u$      &$\frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & 0 & 0 & 0& 0& 0& $-\frac{1}{[\text{C}_u]} R$ &0&0\\
+  P$_{di}$    &0 & $ - \frac{[\text{P}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0&0&0&0 & $\frac{1}{[\text{C}_{di}]} R$  & 0\\
+  P$_m$    &$- \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & 0&0&0&$\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & 0\\
+  \end{tabular}
+  }
+\end{table}
+
+\clearpage
+\section{Application Examples}
+\subsection{Example 1. First Order}
+\subsubsection{Input}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C
+    SOM1
+    Lit1
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+      /
+     FIRSTORDER Lit1
+     RATE_CONSTANT 0.7 1/d 
+    /
+  /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{lit1.eps}
+\caption{Demonstrating simple decomposition}
+\end{figure}
+
+\clearpage
+\subsection{Example 2. Add N}
+
+\subsubsection{Input}
+\begin{verbatim}
+     C
+     N
+     Lit1C
+     Lit1N
+     SOM1
+   /
+   REACTION_SANDBOX
+     CLM-CNP
+       UPSTREAM
+         CPOOL Lit1C
+         NPOOL Lit1N
+       /
+       DOWNSTREAM
+         CPOOL SOM1 0.61
+         CNRATIO 12.d0
+       /
+      FIRSTORDER Lit1C
+      RATE_CONSTANT 0.7 1/d
+     /
+   /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=1.0\textwidth]{lit1cn.eps}
+\caption{Add N}
+\end{figure}
+
+\clearpage
+\subsection{Example 3. Add P}
+\subsubsection{Input}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C   
+    N   
+    Lit1C
+    Lit1N
+    SOM1
+    P   
+    Lit1P
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1C
+        NPOOL Lit1N
+        PPOOL Lit1P
+      /   
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+        CNRATIO 12.d0
+        CPRATIO 350.d0
+      /   
+     FIRSTORDER Lit1C
+     RATE_CONSTANT 0.7 1/d 
+    /   
+  /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=1.0\textwidth]{lit1cnp.eps}
+\caption{Add P}
+\end{figure}
+
+\clearpage
+\subsection{Example 4. Monod}
+\subsubsection{Input}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C   
+    SOM1
+    Lit1
+    MBC 
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1
+      /   
+      DOWNSTREAM
+        CPOOL SOM1 0.56
+      /   
+      DOWNSTREAM
+        CPOOL MBC  0.05
+      /   
+     FIRSTORDER MBC 
+     MONOD Lit1 1.0d-4
+     RATE_CONSTANT 7.0 1/d 
+    /   
+  /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{lit1monod.eps}
+\caption{Add MBC and Use Monod}
+\end{figure}
+
+\clearpage
+\subsection{Example 5. Michaelis-Menten}
+\subsubsection{Input}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C   
+    SOM1
+    Lit1
+    MBC 
+    Enzyme
+  /
+  REACTION_SANDBOX
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1
+      /   
+      DOWNSTREAM
+        CPOOL SOM1 0.56
+      /   
+      DOWNSTREAM
+        CPOOL MBC  0.04
+      /   
+      DOWNSTREAM
+        CPOOL Enzyme 0.01
+      /   
+     FIRSTORDER Enzyme
+     MONOD Lit1 1.0d-4
+     RATE_CONSTANT 70.0 1/d 
+    /   
+  /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{lit1enzyme.eps}
+\caption{Add Enzyme and use Michaelis-Menten}
+\end{figure}
+
+\clearpage
+\subsection{Example 6. CLM-CN without N}
+\subsubsection{Input}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C   
+    Lit1
+    Lit2
+    Lit3
+    SOM1
+    SOM2
+    SOM3
+    SOM4
+    SOMD
+  /
+  REACTION_SANDBOX
+: Lit1 -> 0.61 SOM1 + 0.39 CO2 
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1
+      /   
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+      /   
+     FIRSTORDER Lit1
+     RATE_CONSTANT 0.7 1/d 
+    /   
+: Lit2 -> 0.45 SOM2 + 0.55 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit2
+     /   
+     DOWNSTREAM
+       CPOOL SOM2 0.45
+     /   
+    FIRSTORDER Lit2
+    RATE_CONSTANT 0.07 1/d 
+   /   
+: Lit3 -> 0.71 SOM3 + 0.29 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit3
+     /   
+     DOWNSTREAM
+       CPOOL SOM3 0.71
+     /   
+    FIRSTORDER Lit3
+    RATE_CONSTANT 0.014 1/d 
+   /   
+: SOM1 -> 0.72 SOM2 + 0.28 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM1
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.72
+     /
+    FIRSTORDER SOM1
+    RATE_CONSTANT 0.07 1/d
+   /
+: SOM2 -> 0.54 SOM3 + 0.46 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM2
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.54
+     /
+    FIRSTORDER SOM2
+    RATE_CONSTANT 0.014 1/d
+   /
+: SOM3 -> 0.45 SOM4 + 0.55 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM3
+     /
+     DOWNSTREAM
+       CPOOL SOM4 0.45
+     /
+    FIRSTORDER SOM3
+    RATE_CONSTANT 0.0014 1/d
+   /
+: SOM4 -> 0.39 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM4
+     /
+     DOWNSTREAM
+       CPOOL SOMD 0.0d0
+     /
+    FIRSTORDER SOM4
+    RATE_CONSTANT 0.0001 1/d
+   /
+  /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=1.0\textwidth]{clmc.eps}
+\caption{CLM-C}
+\end{figure}
+
+\clearpage
+\subsection{Example 7. CLM-CN}
+\subsubsection{Input}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C   
+    N   
+    Lit1C
+    Lit1N
+    Lit2C
+    Lit2N
+    Lit3C
+    Lit3N
+    SOM1
+    SOM2
+    SOM3
+    SOM4
+    SOMD
+  /
+  REACTION_SANDBOX
+: Lit1 -> 0.61 SOM1 + 0.39 CO2 
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1C
+        NPOOL Lit1N
+      /   
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+        CNRATIO 12.d0
+      /   
+     FIRSTORDER Lit1C
+     RATE_CONSTANT 0.7 1/d 
+    /   
+: Lit2 -> 0.45 SOM2 + 0.55 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit2C
+       NPOOL Lit2N
+     /   
+     DOWNSTREAM
+       CPOOL SOM2 0.45
+       CNRATIO 12.d0
+     /   
+    FIRSTORDER Lit2C
+    RATE_CONSTANT 0.07 1/d 
+   /   
+: Lit3 -> 0.71 SOM3 + 0.29 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit3C
+       NPOOL Lit3N
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.71
+       CNRATIO 10.d0
+     /
+    FIRSTORDER Lit3C
+    RATE_CONSTANT 0.014 1/d
+   /
+: SOM1 -> 0.72 SOM2 + 0.28 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM1
+       CNRATIO 12.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.72
+       CNRATIO 12.d0
+     /
+    FIRSTORDER SOM1
+    RATE_CONSTANT 0.07 1/d
+   /
+: SOM2 -> 0.54 SOM3 + 0.46 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM2
+       CNRATIO 12.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.54
+       CNRATIO 10.d0
+     /
+    FIRSTORDER SOM2
+    RATE_CONSTANT 0.014 1/d
+   /
+: SOM3 -> 0.45 SOM4 + 0.55 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM3
+       CNRATIO 10.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM4 0.45
+       CNRATIO 10.d0
+     /
+    FIRSTORDER SOM3
+    RATE_CONSTANT 0.0014 1/d
+   /
+: SOM4 -> 0.39 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM4
+       CNRATIO 10.d0
+     /
+     DOWNSTREAM
+       CPOOL SOMD 0.0d0
+       CNRATIO 10.d0
+     /
+    FIRSTORDER SOM4
+    RATE_CONSTANT 0.0001 1/d
+   /
+  /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{clmcn.eps}
+\caption{Adding P}
+\end{figure}
+
+\clearpage
+\subsection{Example 8. CLM-CNP}
+\subsubsection{Input}
+\begin{verbatim}
+  IMMOBILE_SPECIES
+    C   
+    N   
+    Lit1C
+    Lit1N
+    Lit2C
+    Lit2N
+    Lit3C
+    Lit3N
+    SOM1
+    SOM2
+    SOM3
+    SOM4
+    SOMD
+    P   
+    Lit1P
+    Lit2P
+    Lit3P
+  /
+  REACTION_SANDBOX
+: Lit1 -> 0.61 SOM1 + 0.39 CO2 
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1C
+        NPOOL Lit1N
+        PPOOL Lit1P
+      /   
+      DOWNSTREAM
+        CPOOL SOM1 0.61
+        CNRATIO 12.d0
+        CPRATIO 350.d0
+      /   
+     FIRSTORDER Lit1C
+     RATE_CONSTANT 0.7 1/d 
+    /   
+: Lit2 -> 0.45 SOM2 + 0.55 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit2C
+       NPOOL Lit2N
+       PPOOL Lit2P
+     /   
+     DOWNSTREAM
+       CPOOL SOM2 0.45
+       CNRATIO 12.d0
+       CPRATIO 350.d0
+     /   
+    FIRSTORDER Lit2C
+    RATE_CONSTANT 0.07 1/d 
+   /   
+: Lit3 -> 0.71 SOM3 + 0.29 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit3C
+       NPOOL Lit3N
+       PPOOL Lit3P
+     /   
+     DOWNSTREAM
+       CPOOL SOM3 0.71
+       CNRATIO 10.d0
+       CPRATIO 350.d0
+     /
+    FIRSTORDER Lit3C
+    RATE_CONSTANT 0.014 1/d
+   /
+: SOM1 -> 0.72 SOM2 + 0.28 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM1
+       CNRATIO 12.d0
+       CPRATIO 350.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.72
+       CNRATIO 12.d0
+       CPRATIO 350.d0
+     /
+    FIRSTORDER SOM1
+    RATE_CONSTANT 0.07 1/d
+   /
+: SOM2 -> 0.54 SOM3 + 0.46 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM2
+       CNRATIO 12.d0
+       CPRATIO 350.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.54
+       CNRATIO 10.d0
+       CPRATIO 350.d0
+     /
+    FIRSTORDER SOM2
+    RATE_CONSTANT 0.014 1/d
+   /
+: SOM3 -> 0.45 SOM4 + 0.55 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM3
+       CNRATIO 10.d0
+       CPRATIO 350.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM4 0.45
+       CNRATIO 10.d0
+       CPRATIO 350.d0
+     /
+    FIRSTORDER SOM3
+    RATE_CONSTANT 0.0014 1/d
+   /
+: SOM4 -> 0.39 CO2
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM4
+       CNRATIO 10.d0
+       CPRATIO 350.d0
+     /
+     DOWNSTREAM
+       CPOOL SOMD 0.0d0
+       CNRATIO 10.d0
+       CPRATIO 350.d0
+     /
+    FIRSTORDER SOM4
+    RATE_CONSTANT 0.0001 1/d
+   /
+  /
+\end{verbatim}
+
+\subsubsection{Results}
+ \begin{figure}[h]
+\centering
+\includegraphics[width=1.0\textwidth]{clmcnp2.eps}
+\caption{Adding P}
+\end{figure}
+
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{ref}
+
+\end{document}
