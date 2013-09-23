@@ -63,27 +63,27 @@ CHEMISTRY
         DOWNSTREAM_POOL SOM2
         TURNOVER_TIME 14. d
         RESPIRATION_FRACTION 0.28d0
-        N_INHIBITION 1.d-10
+:        N_INHIBITION 1.d-10
       /
       REACTION
         UPSTREAM_POOL SOM2
         DOWNSTREAM_POOL SOM3
         TURNOVER_TIME 71. d
         RESPIRATION_FRACTION 0.46d0
-        N_INHIBITION 1.d-10
+:        N_INHIBITION 1.d-10
       /
       REACTION
         UPSTREAM_POOL SOM3
         DOWNSTREAM_POOL SOM4
         TURNOVER_TIME 2. y
         RESPIRATION_FRACTION 0.55d0
-        N_INHIBITION 1.d-10
+:        N_INHIBITION 1.d-10
       /
       REACTION
         UPSTREAM_POOL SOM4
         TURNOVER_TIME 27.4 y
         RESPIRATION_FRACTION 1.d0
-        N_INHIBITION 1.d-10
+:        N_INHIBITION 1.d-10
       /
     /
     PLANTNTAKE
@@ -141,7 +141,7 @@ END
 TIME
   FINAL_TIME 400.d0 d
   INITIAL_TIMESTEP_SIZE 1.d0 h
-  MAXIMUM_TIMESTEP_SIZE 10.d0 d
+  MAXIMUM_TIMESTEP_SIZE 1.d0 d
 END
 
 :=========================== regions ==========================================
