@@ -13,8 +13,6 @@ CHEMISTRY
   IMMOBILE_SPECIES
     C
     N
-    CWDC
-    CWDN
     Lit1C
     Lit1N
     Lit2C
@@ -26,23 +24,6 @@ CHEMISTRY
     SOM3
   /
   REACTION_SANDBOX
-: CWD -> 0.5 Lit2 + 0.5 Lit3   in CLM4.5, the fraction is a function of clay content
-    CLM-CNP
-      UPSTREAM
-        CPOOL CWDC
-        NPOOL CWDN
-      /
-      DOWNSTREAM
-        CPOOL Lit2C 0.5
-        NPOOL Lit2N
-      /
-      DOWNSTREAM
-        CPOOL Lit3C 0.5
-        NPOOL Lit3N
-      /
-     FIRSTORDER CWDC
-     TURNOVER_TIME 4.1 y 
-    /
 : Lit1 -> 0.45 SOM1 + 0.55 CO2 
     CLM-CNP
       UPSTREAM
@@ -122,15 +103,15 @@ CHEMISTRY
 : SOM3 -> 0.45 SOM1 + 0.55 CO2 
    CLM-CNP
      UPSTREAM
-       CPOOL SOM1
+       CPOOL SOM3
        CNRATIO 11.d0
      /
      DOWNSTREAM
-       CPOOL SOMD 0.0d0
-       CNRATIO 11.d0
+       CPOOL SOM1 0.45d0
+       CNRATIO 8.d0
      /
      FIRSTORDER SOM3
-     TURNOVER_TIME 270.0 y 
+     TURNOVER_TIME 279.0 y
    /
   /
 :  LOG_FORMULATION
@@ -217,9 +198,7 @@ CONSTRAINT initial
   /
   IMMOBILE
     C     1.d-10
-    N     1.d-6
-    CWDC  0.1d-3
-    CWDN  0.2d-6
+    N     5.d-6
     Lit1C     0.1852d-3
     Lit1N     0.00508954d-3
     Lit2C     0.4578d-3

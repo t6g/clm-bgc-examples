@@ -13,8 +13,6 @@ CHEMISTRY
   IMMOBILE_SPECIES
     C
     N
-    CWDC
-    CWDN
     Lit1C
     Lit1N
     Lit2C
@@ -26,23 +24,6 @@ CHEMISTRY
     SOM3
   /
   REACTION_SANDBOX
-: CWD -> 0.5 Lit2 + 0.5 Lit3   in CLM4.5, the fraction is a function of clay content
-    CLM-CNP
-      UPSTREAM
-        CPOOL CWDC
-        NPOOL CWDN
-      /
-      DOWNSTREAM
-        CPOOL Lit2C 0.5
-        NPOOL Lit2N
-      /
-      DOWNSTREAM
-        CPOOL Lit3C 0.5
-        NPOOL Lit3N
-      /
-     FIRSTORDER CWDC
-     TURNOVER_TIME 4.1 y 
-    /
 : Lit1 -> 0.45 SOM1 + 0.55 CO2 
     CLM-CNP
       UPSTREAM
@@ -72,66 +53,66 @@ CHEMISTRY
      NINHIBITION 1.0d-10
    /
 : Lit3 -> 0.5 SOM2 + 0.5 CO2 
-:   CLM-CNP
-:     UPSTREAM
-:       CPOOL Lit3C
-:       NPOOL Lit3N
-:     /
-:     DOWNSTREAM
-:       CPOOL SOM2 0.5
-:       CNRATIO 11.d0
-:     /
-:     FIRSTORDER Lit3C
-:     TURNOVER_TIME 0.25 y
-:     NINHIBITION 1.0d-10
-:   /
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit3C
+       NPOOL Lit3N
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.5
+       CNRATIO 11.d0
+     /
+     FIRSTORDER Lit3C
+     TURNOVER_TIME 0.25 y
+     NINHIBITION 1.0d-10
+   /
 : SOM1 -> 0.26 SOM2 + 025 SOM3 + 0.49 CO2  fraction needs update from CLM 
-:   CLM-CNP
-:     UPSTREAM
-:       CPOOL SOM1
-:       CNRATIO 8.d0
-:     /
-:     DOWNSTREAM
-:       CPOOL SOM2 0.26
-:       CNRATIO 11.d0
-:     /
-:     DOWNSTREAM
-:       CPOOL SOM3 0.25
-:       CNRATIO 11.d0
-:     /
-:    FIRSTORDER SOM1
-:    TURNOVER_TIME 0.17 y
-:   /
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM1
+       CNRATIO 8.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.26
+       CNRATIO 11.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.25
+       CNRATIO 11.d0
+     /
+     FIRSTORDER SOM1
+     TURNOVER_TIME 0.17 y
+   /
 : SOM2 -> 0.2 SOM1 + 0.25 SOM3 + 0.55 CO2 fraction needs update from CLM
-:   CLM-CNP
-:     UPSTREAM
-:       CPOOL SOM2
-:       CNRATIO 11.d0
-:     /
-:     DOWNSTREAM
-:       CPOOL SOM2 0.2
-:       CNRATIO 11.d0
-:     /
-:     DOWNSTREAM
-:       CPOOL SOM3 0.25
-:       CNRATIO 11.d0
-:     /
-:    FIRSTORDER SOM2
-:    TURNOVER_TIME 6.1 y
-:   /
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM2
+       CNRATIO 11.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM2 0.2
+       CNRATIO 11.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM3 0.25
+       CNRATIO 11.d0
+     /
+     FIRSTORDER SOM2
+     TURNOVER_TIME 6.1 y
+   /
 : SOM3 -> 0.45 SOM1 + 0.55 CO2 
-:   CLM-CNP
-:     UPSTREAM
-:       CPOOL SOM1
-:       CNRATIO 11.d0
-:     /
-:     DOWNSTREAM
-:       CPOOL SOMD 0.0d0
-:       CNRATIO 11.d0
-:     /
-:    FIRSTORDER SOM3
-:    RATE_CONSTANT 270.0 y 
-:   /
+   CLM-CNP
+     UPSTREAM
+       CPOOL SOM3
+       CNRATIO 11.d0
+     /
+     DOWNSTREAM
+       CPOOL SOM1 0.45d0
+       CNRATIO 8.d0
+     /
+     FIRSTORDER SOM3
+     TURNOVER_TIME 279.0 y
+   /
   /
 :  LOG_FORMULATION
   DATABASE ../../pflotran-clm4me/database/hanford.dat 
@@ -217,9 +198,7 @@ CONSTRAINT initial
   /
   IMMOBILE
     C     1.d-10
-    N     1.d-6
-    CWDC  0.1d-3
-    CWDN  0.2d-6
+    N     1.d-7
     Lit1C     0.1852d-3
     Lit1N     0.00508954d-3
     Lit2C     0.4578d-3
