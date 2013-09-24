@@ -1,0 +1,248 @@
+:Description: Batch Century simulation
+
+:=========================== useful tranport parameters =======================
+UNIFORM_VELOCITY 0.d0 0.d0 0.d0 
+
+REFERENCE_DENSITY 1.d3
+
+:=========================== chemistry ========================================
+CHEMISTRY
+  PRIMARY_SPECIES
+    A(aq)
+  /
+  IMMOBILE_SPECIES
+    C
+    N
+    CWDC
+    CWDN
+    Lit1C
+    Lit1N
+    Lit2C
+    Lit2N
+    Lit3C
+    Lit3N
+    SOM1
+    SOM2
+    SOM3
+  /
+  REACTION_SANDBOX
+: CWD -> 0.5 Lit2 + 0.5 Lit3   in CLM4.5, the fraction is a function of clay content
+    CLM-CNP
+      UPSTREAM
+        CPOOL CWDC
+        NPOOL CWDN
+      /
+      DOWNSTREAM
+        CPOOL Lit2C 0.5
+        NPOOL Lit2N
+      /
+      DOWNSTREAM
+        CPOOL Lit3C 0.5
+        NPOOL Lit3N
+      /
+     FIRSTORDER CWDC
+     TURNOVER_TIME 4.1 y 
+    /
+: Lit1 -> 0.45 SOM1 + 0.55 CO2 
+    CLM-CNP
+      UPSTREAM
+        CPOOL Lit1C
+        NPOOL Lit1N
+      /
+      DOWNSTREAM
+        CPOOL SOM1 0.45
+        CNRATIO 8.d0
+      /
+     FIRSTORDER Lit1C
+     TURNOVER_TIME 0.066 y 
+     NINHIBITION 1.0d-10
+    /
+: Lit2 -> 0.5 SOM1 + 0.5 CO2 
+   CLM-CNP
+     UPSTREAM
+       CPOOL Lit2C
+       NPOOL Lit2N
+     /
+     DOWNSTREAM
+       CPOOL SOM1 0.5
+       CNRATIO 8.d0
+     /
+     FIRSTORDER Lit2C
+     TURNOVER_TIME 0.25 y
+     NINHIBITION 1.0d-10
+   /
+: Lit3 -> 0.5 SOM2 + 0.5 CO2 
+:   CLM-CNP
+:     UPSTREAM
+:       CPOOL Lit3C
+:       NPOOL Lit3N
+:     /
+:     DOWNSTREAM
+:       CPOOL SOM2 0.5
+:       CNRATIO 11.d0
+:     /
+:     FIRSTORDER Lit3C
+:     TURNOVER_TIME 0.25 y
+:     NINHIBITION 1.0d-10
+:   /
+: SOM1 -> 0.26 SOM2 + 025 SOM3 + 0.49 CO2  fraction needs update from CLM 
+:   CLM-CNP
+:     UPSTREAM
+:       CPOOL SOM1
+:       CNRATIO 8.d0
+:     /
+:     DOWNSTREAM
+:       CPOOL SOM2 0.26
+:       CNRATIO 11.d0
+:     /
+:     DOWNSTREAM
+:       CPOOL SOM3 0.25
+:       CNRATIO 11.d0
+:     /
+:    FIRSTORDER SOM1
+:    TURNOVER_TIME 0.17 y
+:   /
+: SOM2 -> 0.2 SOM1 + 0.25 SOM3 + 0.55 CO2 fraction needs update from CLM
+:   CLM-CNP
+:     UPSTREAM
+:       CPOOL SOM2
+:       CNRATIO 11.d0
+:     /
+:     DOWNSTREAM
+:       CPOOL SOM2 0.2
+:       CNRATIO 11.d0
+:     /
+:     DOWNSTREAM
+:       CPOOL SOM3 0.25
+:       CNRATIO 11.d0
+:     /
+:    FIRSTORDER SOM2
+:    TURNOVER_TIME 6.1 y
+:   /
+: SOM3 -> 0.45 SOM1 + 0.55 CO2 
+:   CLM-CNP
+:     UPSTREAM
+:       CPOOL SOM1
+:       CNRATIO 11.d0
+:     /
+:     DOWNSTREAM
+:       CPOOL SOMD 0.0d0
+:       CNRATIO 11.d0
+:     /
+:    FIRSTORDER SOM3
+:    RATE_CONSTANT 270.0 y 
+:   /
+  /
+:  LOG_FORMULATION
+  DATABASE ../../pflotran-clm4me/database/hanford.dat 
+  OUTPUT
+    all
+  /
+END
+
+:=========================== solver options ===================================
+LINEAR_SOLVER TRANSPORT
+  SOLVER DIRECT
+END
+
+NEWTON_SOLVER TRANSPORT
+  ATOL 1.d-50
+:  RTOL 1.d-12
+END
+
+:=========================== discretization ===================================
+GRID
+  TYPE structured
+  NXYZ 1 1 1
+  BOUNDS
+    0.d0 1.d0
+    0.d0 1.d0
+    0.d0 1.d0
+  /
+END
+
+:=========================== fluid properties =================================
+FLUID_PROPERTY 
+  DIFFUSION_COEFFICIENT 1.d-9
+END
+
+:=========================== material properties ==============================
+MATERIAL_PROPERTY soil1
+  ID 1
+  POROSITY 0.25d0
+  TORTUOSITY 1.d0
+END
+
+:=========================== output options ===================================
+OUTPUT
+  PERIODIC_OBSERVATION TIMESTEP 1
+END
+
+:=========================== times ============================================
+TIME
+  FINAL_TIME 10.d0 y
+  INITIAL_TIMESTEP_SIZE 1.d-2 h
+  MAXIMUM_TIMESTEP_SIZE 1.d0 d
+END
+
+:=========================== regions ==========================================
+REGION all
+  COORDINATES
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
+  /
+END
+
+REGION obs_pt
+  COORDINATE 0.5 0.5 0.5
+END
+
+:=========================== observation points ===============================
+OBSERVATION
+  REGION obs_pt
+END
+
+:=========================== transport conditions =============================
+TRANSPORT_CONDITION initial
+  TYPE zero_gradient
+  CONSTRAINT_LIST
+    0.d0 initial
+  /
+END
+
+:=========================== transport constraints ============================
+CONSTRAINT initial
+  CONCENTRATIONS
+    A(aq)  1.d-40     T  ! moles/L
+  /
+  IMMOBILE
+    C     1.d-10
+    N     1.d-6
+    CWDC  0.1d-3
+    CWDN  0.2d-6
+    Lit1C     0.1852d-3
+    Lit1N     0.00508954d-3
+    Lit2C     0.4578d-3
+    Lit2N     0.01258096d-3
+    Lit3C     0.2662d-3
+    Lit3N     0.00731553d-3
+    SOM1      1.d-10
+    SOM2      1.d-10
+    SOM3      1.d-10
+  /
+END
+
+:=========================== condition couplers ===============================
+: initial condition
+INITIAL_CONDITION
+  TRANSPORT_CONDITION initial
+  REGION all
+END
+
+:=========================== stratigraphy couplers ============================
+STRATA
+  REGION all
+  MATERIAL soil1
+END
+
+
