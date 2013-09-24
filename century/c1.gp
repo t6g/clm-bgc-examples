@@ -17,26 +17,25 @@ set yrange[0:0.5]
 set xlabel 'Time [y]' 
 set ylabel 'Concentration [mmol/m^3]' 
 plot \
-     'c1-obs-0.tec' using 1:($5*1000) title 'CWDC' with lines ls 1, \
-     'c1-obs-0.tec' using 1:($7*1000) title 'Lit1C' with lines ls 2, \
-     'c1-obs-0.tec' using 1:($9*1000) title 'Lit2C' with lines ls 3, \
-     'c1-obs-0.tec' using 1:($11*1000) title 'Lit3C' with lines ls 4
+     'c1-obs-0.tec' using 1:($5*1000) title 'Lit1C' with lines ls 1, \
+     'c1-obs-0.tec' using 1:($7*1000) title 'Lit2C' with lines ls 2, \
+     'c1-obs-0.tec' using 1:($9*1000) title 'Lit3C' with lines ls 3
 
 set label 1 '(b)' at graph 0.05, graph 0.9 
 plot \
-     'c1-obs-0.tec' using 1:($13*1000) title 'SOM1' with lines ls 1, \
-     'c1-obs-0.tec' using 1:($14*1000) title 'SOM2' with lines ls 2, \
-     'c1-obs-0.tec' using 1:($15*1000) title 'SOM3' with lines ls 3
+     'c1-obs-0.tec' using 1:($11*1000) title 'SOM1' with lines ls 1, \
+     'c1-obs-0.tec' using 1:($12*1000) title 'SOM2' with lines ls 2, \
+     'c1-obs-0.tec' using 1:($13*1000) title 'SOM3' with lines ls 3
 
 set label 1 '(c)' at graph 0.05, graph 0.9 
 set yrange[0:1]
 plot \
-     'c1-obs-0.tec' using 1:($3+$5+$7+$9+$11+$13+$14+$15)*1000 title 'C total' with lines ls 1, \
-     'c1-obs-0.tec' using 1:($5+$7+$9+$11+$13+$14+$15)*1000 title 'C left' with lines ls 2, \
+     'c1-obs-0.tec' using 1:($3+$5+$7+$9+$11+$12+$13)*1000 title 'C total' with lines ls 1, \
+     'c1-obs-0.tec' using 1:($5+$7+$9+$11+$12+$13)*1000 title 'C left' with lines ls 2, \
      'c1-obs-0.tec' using 1:($3*1000) title 'C respired' with lines ls 3
 
 set label 1 '(d)' at graph 0.05, graph 0.9 
-set yrange[0:0.5]
+set yrange[0:0.05]
 set ylabel 'Concentration [mmol/m^3]' 
 plot \
      'c1-obs-0.tec' using 1:($4*1e3) title 'Mineral N' with lines ls 1
