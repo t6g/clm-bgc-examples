@@ -82,10 +82,10 @@ n_u \text{N}_u \rightarrow \sum n_i \text{N}_i
 n_m + n_b + n_e + n_d = n_u
 \end{equation}
 
-$n_u = [\text{N}_u]/[\text{C}_u]$, $n_b = [\text{N}_b]/[\text{C}_b]$, $n_e = [\text{N}_e]/[\text{C}_e]$, and $n_d = [\text{N}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $n_m > 0$, this decomposition reaction produces mineral N (mineralization). Otherwise, the reaction takes up mineral N (immobilization). In the late case, a $f([\text{N}_m])=[\text{N}_m]/(K_{Nm}+[\text{N}_m])$ term is added tothe decomposition rate in Eq. (\ref{ratec}).
+$n_u = [\text{N}_u]/[\text{C}_u]$, $n_b = c_b[\text{N}_b]/[\text{C}_b]$, $n_e = c_e[\text{N}_e]/[\text{C}_e]$, and $n_d = c_d[\text{N}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $n_m > 0$, this decomposition reaction produces mineral N (mineralization). Otherwise, the reaction takes up mineral N (immobilization). In the late case, a $f([\text{N}_m])=[\text{N}_m]/(K_{Nm}+[\text{N}_m])$ term is added to the decomposition rate in Eq. (\ref{ratec}) if NINHIBITION term is specified.
 \subsubsection{Rate}
 \begin{equation}
--\frac{1}{n_u}\frac{\partial [\text{N}_u]}{\partial t} = \frac{1}{n_m}\frac{\partial [\text{N}_m]}{\partial t} = \frac{1}{n_b} \frac{\partial [\text{N}_b]}{\partial t} = \frac{1}{n_e} \frac{\partial [\text{N}_e]}{\partial t} = \frac{1}{n_d}\frac{\partial [\text{N}_d]}{\partial t}
+-\frac{1}{n_u}\frac{\partial [\text{N}_u]}{\partial t} = \frac{1}{n_m}\frac{\partial [\text{N}_m]}{\partial t} = \frac{1}{n_b} \frac{\partial [\text{N}_b]}{\partial t} = \frac{1}{n_e} \frac{\partial [\text{N}_e]}{\partial t} = \frac{1}{n_d}\frac{\partial [\text{N}_d]}{\partial t} = R
 \end{equation}
 
 \subsection{P}
@@ -102,26 +102,373 @@ p_u \text{P}_u \rightarrow \sum p_i \text{P}_i
 p_m + p_b + p_e + p_d = p_u
 \end{equation}
 
-$p_u = [\text{P}_u]/[\text{C}_u]$, $p_b = [\text{P}_b]/[\text{C}_b]$, $p_e = [\text{P}_e]/[\text{C}_e]$, and $p_d = [\text{P}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $p_m > 0$, this decomposition reaction produces mineral P (mineralization). Otherwise, the reaction takes up mineral P (immobilization). In the late case, a $f([\text{P}_m])=[\text{P}_m]/(K_{Pm}+[\text{P}_m])$ term is added tothe decomposition rate in Eq. (\ref{ratec}).
+$p_u = [\text{P}_u]/[\text{C}_u]$, $p_b = c_b[\text{P}_b]/[\text{C}_b]$, $p_e = c_e[\text{P}_e]/[\text{C}_e]$, and $p_d = c_d[\text{P}_d]/[\text{C}_d]$. These stoichiometric coefficient can be fixed or variable. If $p_m > 0$, this decomposition reaction produces mineral P (mineralization). Otherwise, the reaction takes up mineral P (immobilization). In the late case, a $f([\text{P}_m])=[\text{P}_m]/(K_{Pm}+[\text{P}_m])$ term is added to the decomposition rate in Eq. (\ref{ratec}) if PINHIBITION term is specified.
 \subsubsection{Rate}
 \begin{equation}
--\frac{1}{p_u}\frac{\partial [\text{P}_u]}{\partial t} = \frac{1}{p_m}\frac{\partial [\text{P}_m]}{\partial t} = \frac{1}{p_b} \frac{\partial [\text{P}_b]}{\partial t} = \frac{1}{p_e} \frac{\partial [\text{P}_e]}{\partial t} = \frac{1}{p_d}\frac{\partial [\text{P}_d]}{\partial t}
+-\frac{1}{p_u}\frac{\partial [\text{P}_u]}{\partial t} = \frac{1}{p_m}\frac{\partial [\text{P}_m]}{\partial t} = \frac{1}{p_b} \frac{\partial [\text{P}_b]}{\partial t} = \frac{1}{p_e} \frac{\partial [\text{P}_e]}{\partial t} = \frac{1}{p_d}\frac{\partial [\text{P}_d]}{\partial t} = R
 \end{equation}
 
 \subsection{Residuals}
 \begin{align*}
-R_{Cu} &=  -R \\
-R_{Cdi} &=  d_i R \\
-R_{Cm} &=  (1 - d_i) R \\
-R_{Nu} &= -\frac{[\text{N}_u]}{[\text{C}_u]}R \\
-R_{Ndi} &=  \frac{[\text{N}_{di}]}{[\text{C}_{di}]} R \\
-R_{Nm} &=  \left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right) R \\
-R_{Pu} &= -\frac{[\text{P}_u]}{[\text{C}_u]}R \\
-R_{Pdi} &=  \frac{[\text{P}_{di}]}{[\text{C}_{di}]} R \\
-R_{Pm} &=  \left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right) R \\
+R_{Cu} & =  &-R \\
+R_{Cdi} & = & c_i R \\
+R_{Cm} & =&  c_m R &= (1 - \sum c_i) R \\
+R_{Nu} & = &-n_u R &=  -\frac{[\text{N}_u]}{[\text{C}_u]}R \\
+R_{Ndi} & = & n_i R &= c_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} R \\
+R_{Nm} & = & n_m R &= \left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum c_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right) R \\
+R_{Pu} & = &-p_u R &= -\frac{[\text{P}_u]}{[\text{C}_u]}R \\
+R_{Pdi} & = & p_i R &= c_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} R \\
+R_{Pm} & = & p_m R &= \left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right) R \\
 \end{align*}
 
 \subsection{Jacobians}
+\subsubsection{General}
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition (total)} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$\\
+  \hline 
+  C$_u$      &
+  $-\frac{\partial R}{\partial \text{C}_u}$  & 
+  $-\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0  & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_{di}$   & 
+  $c_i \frac{\partial R}{\partial \text{C}_u}$ &  
+  $c_i \frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  0 &
+  0 & 
+  $c_i \frac{\partial R}{\partial \text{N}_m}$ &
+  0 &
+  0 & 
+  $c_i \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_m$     &
+  $c_m\frac{\partial R}{\partial \text{C}_u}$  & 
+  $c_m\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0  & 
+  0 &
+  0 & 
+  $c_m\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 &
+  0 & 
+  $c_m\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  N$_u$      &
+  $-n_u\frac{\partial R}{\partial \text{C}_u} - \frac{\partial n_u}{\partial \text{C}_u} R$  & 
+  $-n_u\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 & 
+  $ - \frac{\partial n_u}{\partial \text{N}_u} R$ &
+  0&
+  $-n_u\frac{\partial R}{\partial \text{N}_m} $ &
+  0 &
+  0 & 
+  $-n_u\frac{\partial R}{\partial \text{P}_m} $\\
+
+  N$_{di}$    &
+  $n_i\frac{\partial R}{\partial \text{C}_u} + \frac{\partial n_i}{\partial \text{C}_u} R$  & 
+  $n_i\frac{\partial R}{\partial \text{C}_{di}} + \frac{\partial n_i}{\partial \text{C}_{di}}R$  & 
+  0 & 
+  $ \frac{\partial n_i}{\partial \text{N}_{u}} R$  & 
+  $ \frac{\partial n_i}{\partial \text{N}_{di}} R$  & 
+  $n_i\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 & 
+  0 & 
+  $n_i\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  N$_m$    &
+  $n_m\frac{\partial R}{\partial \text{C}_u} + \frac{\partial n_m}{\partial \text{C}_u} R$  & 
+  $n_m\frac{\partial R}{\partial \text{C}_{di}} + \frac{\partial n_m}{\partial \text{C}_{di}} R$  & 
+  0 & 
+  $\frac{\partial n_m}{\partial \text{N}_u} R$   & 
+  $\frac{\partial n_m}{\partial \text{N}_{di}} R$ & 
+  $n_m\frac{\partial R}{\partial \text{N}_m} $ & 
+  0 & 
+  0 & 
+  $n_m\frac{\partial R}{\partial \text{P}_m} $\\
+  
+  P$_u$      &
+  $-p_u\frac{\partial R}{\partial \text{C}_u} - \frac{\partial p_u}{\partial \text{C}_u} R$  & 
+  $-p_u\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  0 &
+  0 &
+  $-p_u\frac{\partial R}{\partial \text{N}_m}$ &
+  $-\frac{\partial p_u}{\partial \text{N}_u} R$ &
+  0&
+  $-p_u\frac{\partial R}{\partial \text{P}_m}$ \\
+
+  P$_{di}$    &
+  $p_i\frac{\partial R}{\partial \text{C}_u} + \frac{\partial p_i}{\partial \text{C}_u}R$  & 
+  $p_i\frac{\partial R}{\partial \text{C}_{di}} + \frac{\partial p_i}{\partial \text{C}_{di}}R$  & 
+  0 & 
+  0 &
+  0&
+  $p_i\frac{\partial R}{\partial \text{N}_m}$& 
+  $\frac{\partial p_i}{\text{p}_{u}} R$   & 
+  $\frac{\partial p_i}{\text{p}_{di}} R$  & 
+  $p_i \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  P$_m$    &
+  $p_m \frac{\partial R}{\partial \text{C}_u} + \frac{\partial p_m}{\partial \text{C}_u} R$  & 
+  $p_m\frac{\partial R}{\partial \text{C}_{di}} + \frac{\partial p_m}{\partial \text{C}_{di}} R$  & 
+  0 &
+  0 &
+  0& 
+  $p_m\frac{\partial R}{\partial \text{N}_m} $ & 
+  $\frac{\partial p_m}{\partial \text{P}_u} R$   & 
+  $\frac{\partial p_m}{\partial \text{P}_{di}} R$ & 
+  $p_m\frac{\partial R}{\partial \text{P}_m} $ \\
+  \end{tabular}
+  }
+\end{table}
+
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition (variable C, N, and P ratio)} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$\\
+  \hline 
+  N$_u$      &
+  $- \frac{\partial n_u}{\partial \text{C}_u} R$  & 
+  $-n_u\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 & 
+  $ - \frac{\partial n_u}{\partial \text{N}_u} R$ &
+  0&
+  $-n_u\frac{\partial R}{\partial \text{N}_m} $ &
+  0 &
+  0 & 
+  $-n_u\frac{\partial R}{\partial \text{P}_m} $\\
+
+  N$_{di}$    &
+  $\frac{\partial n_i}{\partial \text{C}_u} R$  & 
+  $\frac{\partial n_i}{\partial \text{C}_{di}}R$  & 
+  0 & 
+  $ \frac{\partial n_i}{\partial \text{N}_{u}} R$  & 
+  $ \frac{\partial n_i}{\partial \text{N}_{di}} R$  & 
+  0& 
+  0 & 
+  0 & 
+  0\\
+  
+  N$_m$    &
+  $\frac{\partial n_m}{\partial \text{C}_u} R$  & 
+  $\frac{\partial n_m}{\partial \text{C}_{di}} R$  & 
+  0 & 
+  $\frac{\partial n_m}{\partial \text{N}_u} R$   & 
+  $\frac{\partial n_m}{\partial \text{N}_{di}} R$ & 
+  0 & 
+  0 & 
+  0 & 
+  0 $\\
+  
+  P$_u$      &
+  $- \frac{\partial p_u}{\partial \text{C}_u} R$  & 
+  0 & 
+  0 &
+  0 &
+  0 &
+  $ &
+  $-\frac{\partial p_u}{\partial \text{N}_u} R$ &
+  0&
+  0 \\
+
+  P$_{di}$    &
+  $\frac{\partial p_i}{\partial \text{C}_u}R$  & 
+  $\frac{\partial p_i}{\partial \text{C}_{di}}R$  & 
+  0 & 
+  0 &
+  0&
+  0& 
+  $\frac{\partial p_i}{\text{p}_{u}} R$   & 
+  $\frac{\partial p_i}{\text{p}_{di}} R$  & 
+  0\\
+  
+  P$_m$    &
+  $\frac{\partial p_m}{\partial \text{C}_u} R$  & 
+  $\frac{\partial p_m}{\partial \text{C}_{di}} R$  & 
+  0 &
+  0 &
+  0& 
+  0 & 
+  $\frac{\partial p_m}{\partial \text{P}_u} R$   & 
+  $\frac{\partial p_m}{\partial \text{P}_{di}} R$ & 
+ 0\\
+  \end{tabular}
+  }
+\end{table}
+
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition (rate terms)} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$\\
+  \hline 
+  C$_u$      &
+  $-\frac{\partial R}{\partial \text{C}_u}$  & 
+  $-\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0  & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_{di}$   & 
+  $c_i \frac{\partial R}{\partial \text{C}_u}$ &  
+  $c_i \frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  0 &
+  0 & 
+  $c_i \frac{\partial R}{\partial \text{N}_m}$ &
+  0 &
+  0 & 
+  $c_i \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_m$     &
+  $c_m\frac{\partial R}{\partial \text{C}_u}$  & 
+  $c_m\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0  & 
+  0 &
+  0 & 
+  $c_m\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 &
+  0 & 
+  $c_m\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  N$_u$      &
+  $-n_u\frac{\partial R}{\partial \text{C}_u} $  & 
+  $-n_u\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 & 
+  0&
+  0&
+  $-n_u\frac{\partial R}{\partial \text{N}_m} $ &
+  0 &
+  0 & 
+  $-n_u\frac{\partial R}{\partial \text{P}_m} $\\
+
+  N$_{di}$    &
+  $n_i\frac{\partial R}{\partial \text{C}_u} $  & 
+  $n_i\frac{\partial R}{\partial \text{C}_{di}} $  & 
+  0 & 
+  0 & 
+  0  & 
+  $n_i\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 & 
+  0 & 
+  $n_i\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  N$_m$    &
+  $n_m\frac{\partial R}{\partial \text{C}_u} $  & 
+  $n_m\frac{\partial R}{\partial \text{C}_{di}} $  & 
+  0 & 
+  0   & 
+  0 & 
+  $n_m\frac{\partial R}{\partial \text{N}_m} $ & 
+  0 & 
+  0 & 
+  $n_m\frac{\partial R}{\partial \text{P}_m} $\\
+  
+  P$_u$      &
+  $-p_u\frac{\partial R}{\partial \text{C}_u} & 
+  $-p_u\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  0 &
+  0 &
+  $-p_u\frac{\partial R}{\partial \text{N}_m}$ &
+  0 &
+  0&
+  $-p_u\frac{\partial R}{\partial \text{P}_m}$ \\
+
+  P$_{di}$    &
+  $p_i\frac{\partial R}{\partial \text{C}_u} $  & 
+  $p_i\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0 & 
+  0 &
+  0&
+  $p_i\frac{\partial R}{\partial \text{N}_m}$& 
+  0  & 
+  0 & 
+  $p_i \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  P$_m$    &
+  $p_m \frac{\partial R}{\partial \text{C}_u}$  & 
+  $p_m\frac{\partial R}{\partial \text{C}_{di}} $  & 
+  0 &
+  0 &
+  0& 
+  $p_m\frac{\partial R}{\partial \text{N}_m} $ & 
+  0   & 
+  0 & 
+  $p_m\frac{\partial R}{\partial \text{P}_m} $ \\
+  \end{tabular}
+  }
+\end{table}
+
+\clearpage
+
+
+\subsubsection{Constant CNP Ratios}
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_m$ &  P$_m$\\
+  \hline 
+  C$_u$      &
+  $-\frac{\partial R}{\partial \text{C}_u}$  & 
+  $-\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0  & 
+  $-\frac{\partial R}{\partial \text{N}_m}$ & 
+  $-\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_{di}$   & 
+  $d_i \frac{\partial R}{\partial \text{C}_u}$ &  
+  $d_i \frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  $d_i \frac{\partial R}{\partial \text{N}_m}$ &
+  $d_i \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_m$     &
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{C}_u}$  & 
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0 & 
+  $(1- \sum d_i)\frac{\partial R}{\partial \text{N}_m}$ & 
+  $(1- \sum d_i)\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  N$_m$    &
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u} $  & 
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} -\sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0 & 
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & 
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $\\
+  
+  P$_m$    &
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u}$  & 
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0 &
+   $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & 
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $ \\
+  \end{tabular}
+  }
+\end{table}
+
+\subsubsection{Variable CNP Ratios}
+
+\subsubsection{Downstream CNP Ratio Follow Upstream}
 
 \begin{table}[hb]
 \centering
@@ -130,20 +477,103 @@ R_{Pm} &=  \left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\te
 \begin{tabular}{ c | ccccccccc }
                       &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$\\
   \hline 
-  C$_u$      &$-\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{\partial R}{\partial \text{C}_{di}}$ & 0    & 0 &0 & $-\frac{\partial R}{\partial \text{N}_m}$ & 0 &0 & $-\frac{\partial R}{\partial \text{P}_m}$\\
-  C$_{di}$   & $d_i \frac{\partial R}{\partial \text{C}_u}$ &  $d_i \frac{\partial R}{\partial \text{C}_{di}}$ & 0 &0 &0 & $d_i \frac{\partial R}{\partial \text{N}_m}$ &0 &0 & $d_i \frac{\partial R}{\partial \text{P}_m}$\\
-  C$_m$     &$(1-d_i)\frac{\partial R}{\partial \text{C}_u}$  & $(1-d_i)\frac{\partial R}{\partial \text{C}_{di}}$  & 0  & 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{N}_m}$ & 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{P}_m}$\\
-  N$_u$      &$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u} + \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 & $-\frac{1}{[\text{C}_u]} R$ &0&$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $ &0 &0 & $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
-  N$_{di}$    &$\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0 & $\frac{1}{[\text{C}_{di}]} R$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 0 & 0 & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
-  N$_m$    &$\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u} - \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} + \frac{[\text{N}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & $\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & 0 & 0 & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $\\
-  P$_u$      &$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u} + \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 &0 &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m}$ &$-\frac{1}{[\text{C}_u]} R$ &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m}$ \\
-  P$_{di}$    &$\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0 &0&$\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$& 0 & $\frac{1}{[\text{C}_{di}]} R$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
-  P$_m$    &$\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u} - \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} + \frac{[\text{P}_{di}]}{[\text{C}_{di}]^2} R$  & 0 &0 &0& $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & $\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $ \\
+  C$_u$      &
+  $-\frac{\partial R}{\partial \text{C}_u}$  & 
+  $-\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0  & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_{di}$   & 
+  $d_i \frac{\partial R}{\partial \text{C}_u}$ &  
+  $d_i \frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  0 &
+  0 & 
+  $d_i \frac{\partial R}{\partial \text{N}_m}$ &
+  0 &
+  0 & 
+  $d_i \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_m$     &
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{C}_u}$  & 
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0  & 
+  0 &
+  0 & 
+  $(1- \sum d_i)\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 &
+  0 & 
+  $(1- \sum d_i)\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  N$_u$      &
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u} + \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & 
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 & 
+  $-\frac{1}{[\text{C}_u]} R$ &
+  0&
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $ &
+  0 &
+  0 & 
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
+
+  N$_{di}$    &
+  $d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & 
+  $d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}} - d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]^2}R$  & 
+  0 & 
+  0 & 
+  $d_i \frac{1}{[\text{C}_{di}]} R$  & $d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 
+  0 & 
+  0 & 
+  $d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  N$_m$    &
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u} - d_i\frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & 
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} -\sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} + d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]^2} R$  & 
+  0 & 
+  $\frac{1}{[\text{C}_u]} R$   & $-d_i\frac{1}{[\text{C}_{di}]} R$ & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & 
+  0 & 
+  0 & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $\\
+  
+  P$_u$      &
+  $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u} + \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & 
+  $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  0 &
+  0 &
+  $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m}$ &
+  $-\frac{1}{[\text{C}_u]} R$ &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m}$ \\
+
+  P$_{di}$    &
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & 
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}} - d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]^2}R$  & 
+  0 & 
+  0 &
+  0&
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$& 
+  0 & 
+  $d_i\frac{1}{[\text{C}_{di}]} R$  & 
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  P$_m$    &
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u} - d_i\frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & 
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} + d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]^2} R$  & 
+  0 &
+  0 &
+  0& 
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{N}_m} $ & 
+  $\frac{1}{[\text{C}_u]} R$   & 
+  $-d_i\frac{1}{[\text{C}_{di}]} R$ & 
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{P}_m} $ \\
   \end{tabular}
   }
 \end{table}
 
-To use N$_m$/(K$_N$ + N$_m$) term for N-limiting cases ($\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]} < 0$), 
+To use N$_m$/(K$_N$ + N$_m$) term for N-limiting cases ($\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]} < 0$), 
 
 \begin{equation}
 \frac{\partial R}{\partial \text{N}_m} = R \frac{K_N}{(K_N + \text{N}_m)\text{N}_m}
@@ -183,22 +613,110 @@ because
 \begin{tabular}{ c | ccccccccc }
                       &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$\\
   \hline 
-  C$_u$      &$-\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{\partial R}{\partial \text{C}_{di}}$ & 0    & 0 &0 & $-\frac{\partial R}{\partial \text{N}_m}$ & 0 &0 & $-\frac{\partial R}{\partial \text{P}_m}$\\
-  C$_{di}$   & $d_i \frac{\partial R}{\partial \text{C}_u}$ &  $d_i \frac{\partial R}{\partial \text{C}_{di}}$ & 0 &0 &0 & $d_i \frac{\partial R}{\partial \text{N}_m}$&0 &0 & $d_i \frac{\partial R}{\partial \text{P}_m}$\\
-  C$_m$     &$(1-d_i)\frac{\partial R}{\partial \text{C}_u}$  & $(1-d_i)\frac{\partial R}{\partial \text{C}_{di}}$  & 0  & 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{N}_m}$& 0 &0 & $(1-d_i)\frac{\partial R}{\partial \text{N}_m}$\\
-  N$_u$      &$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 & 0 &0&$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $& 0 &0&$-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
-  N$_{di}$    &$\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}}$  & 0 & 0 & 0  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 0 & 0  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
-  N$_m$    &$\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u}$  & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} $  & 0 & 0   & 0 & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{N}_m} $ & 0   & 0 & $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \frac{[\text{N}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{P}_m} $\\
-  P$_u$      &$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u}$  & $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 0 & 0 &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $ & 0 &0&$-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
-  P$_{di}$    &$\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}}$  & 0 & 0 & 0  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 0 & 0  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
-  P$_m$    &$\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u}$  & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} $  & 0 & 0   & 0 & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{N}_m} $ & 0   & 0 & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \frac{[\text{P}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{P}_m} $ \\
+  C$_u$      &
+  $-\frac{\partial R}{\partial \text{C}_u}$  & 
+  $-\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0    & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{N}_m}$ & 
+  0 &
+  0 & 
+  $-\frac{\partial R}{\partial \text{P}_m}$\\
+  
+  C$_{di}$   & 
+  $d_i \frac{\partial R}{\partial \text{C}_u}$ &  
+  $d_i \frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 &
+  0 &
+  0 & 
+  $d_i \frac{\partial R}{\partial \text{N}_m}$&
+  0 &
+  0 & 
+  $d_i \frac{\partial R}{\partial \text{P}_m}$\\
+
+  C$_m$     &
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{C}_u}$  & 
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0  & 
+  0 &
+  0 & 
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{N}_m}$& 
+  0 &
+  0 & 
+  $(1-\sum d_i)\frac{\partial R}{\partial \text{N}_m}$\\
+  
+  N$_u$      &
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u}$  & 
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 & 
+  0 &
+  0&
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $& 
+  0 &
+  0&
+  $-\frac{[\text{N}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
+  
+  N$_{di}$    &
+  $d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & 
+  $d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0 & 
+  0 & 
+  0  & 
+  $ d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 
+  0 & 
+  0  & 
+  $d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+
+  N$_m$    &
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u}$  & 
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} $  & 
+  0 & 
+  0   & 
+  0 & 
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{N}_m} $ & 
+  0   & 
+  0 & 
+  $\left(\frac{[\text{N}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{N}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{P}_m} $\\
+ 
+  P$_u$      &
+  $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_u}$  & 
+  $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{C}_{di}}$ & 
+  0 & 
+  0 &
+  0&
+  $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{N}_m} $ & 
+  0 &
+  0&
+  $-\frac{[\text{P}_u]}{[\text{C}_u]}\frac{\partial R}{\partial \text{P}_m} $\\
+  
+  P$_{di}$    &
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_u}$  & 
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{C}_{di}}$  & 
+  0 & 
+  0 & 
+  0  & 
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{N}_m}$ & 
+  0 & 
+  0  & 
+  $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]} \frac{\partial R}{\partial \text{P}_m}$\\
+  
+  P$_m$    &
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_u}$  & $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]}\right)\frac{\partial R}{\partial \text{C}_{di}} $  & 
+  0 & 
+  0   & 
+  0 & 
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{N}_m} $ & 
+  0   & 
+  0 & 
+  $\left(\frac{[\text{P}_u]}{[\text{C}_u]} - \sum d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}}]\right) \frac{\partial R}{\partial \text{P}_m} $ \\
   \end{tabular}
   }
 \end{table}
 
 \begin{table}[hb]
 \centering
- \caption{Jacobian for general decomposition (add only once)} 
+ \caption{Jacobian for general decomposition (add only once, C, N, P ratio relevant terms)} 
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{ c | ccccccccc }
                       &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$ \\
@@ -207,14 +725,48 @@ because
   C$_{di}$   & 0 &  0 & 0 &0 &0 & 0&0&0&0\\
   C$_m$     &0  & 0 & 0  & 0 &0 & 0&0&0&0\\
   N$_u$      &$\frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & 0 & 0 & $-\frac{1}{[\text{C}_u]} R$ &0&0 &0&0&0\\
-  N$_{di}$    &0 & $ - \frac{[\text{N}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0 & $\frac{1}{[\text{C}_{di}]} R$  & 0&0&0&0\\
+  N$_{di}$    &0 & $ - d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0 & $d_i\frac{1}{[\text{C}_{di}]} R$  & 0&0&0&0\\
+  N$_m$    &$- \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & $d_i\frac{[\text{N}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & $\frac{1}{[\text{C}_u]} R$   & $-d_i\frac{1}{[\text{C}_{di}]} R$ & 0&0&0&0\\
+  P$_u$      &$\frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & 0 & 0 & 0& 0& 0& $-\frac{1}{[\text{C}_u]} R$ &0&0\\
+  P$_{di}$    &0 & $ - d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0&0&0&0 & $d_i\frac{1}{[\text{C}_{di}]} R$  & 0\\
+  P$_m$    &$- \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & $d_i\frac{[\text{P}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & 0&0&0&$\frac{1}{[\text{C}_u]} R$   & $-d_i\frac{1}{[\text{C}_{di}]} R$ & 0\\
+  \end{tabular}
+  }
+\end{table}
+
+\clearpage
+\subsection{Addition}
+For the case with downstream pool CN or CP ratio follows the upstream pool, the residuals are
+
+\begin{align*}
+R_{Ndi} &=  d_i\frac{[\text{N}_{u}]}{[\text{C}_{u}]} R \\
+R_{Nm} &=  \left(\frac{[\text{N}_u]}{[\text{C}_u]} - d_i\frac{[\text{N}_{u}]}{[\text{C}_{u}]}\right) R \\
+R_{Pdi} &=  d_i\frac{[\text{P}_{u}]}{[\text{C}_{u}]} R \\
+R_{Pm} &=  \left(\frac{[\text{P}_u]}{[\text{C}_u]} - d_i \frac{[\text{P}_{u}]}{[\text{C}_{u}]}\right) R \\
+\end{align*}
+
+\begin{table}[hb]
+\centering
+ \caption{Jacobian for general decomposition (add only once, C, N, P ratio relevant terms)} 
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{ c | ccccccccc }
+                      &  C$_u$ & C$_{di}$ & C$_m$ &  N$_u$ & N$_{di}$ & N$_m$ &  P$_u$ & P$_{di}$ & P$_m$ \\
+  \hline 
+  C$_u$      &0  & 0 & 0    & 0 &0 & 0 &0&0&0\\
+  C$_{di}$   & 0 &  0 & 0 &0 &0 & 0&0&0&0\\
+  C$_m$     &0  & 0 & 0  & 0 &0 & 0&0&0&0\\
+  N$_u$      &$\frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & 0 & 0 & $-\frac{1}{[\text{C}_u]} R$ &0&0 &0&0&0\\
+  N$_{di}$    &$ -d_i \frac{[\text{N}_{u}]}{[\text{C}_{u}]^2}R$  & 0 & 0 & d_i $\frac{1}{[\text{C}_{u}]} R$  &0 & 0&0&0&0\\
   N$_m$    &$- \frac{[\text{N}_u]}{[\text{C}_u]^2} R$  & $\frac{[\text{N}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & $\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & 0&0&0&0\\
   P$_u$      &$\frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & 0 & 0 & 0& 0& 0& $-\frac{1}{[\text{C}_u]} R$ &0&0\\
-  P$_{di}$    &0 & $ - \frac{[\text{P}_{di}]}{[\text{C}_{di}]^2}R$  & 0 & 0&0&0&0 & $\frac{1}{[\text{C}_{di}]} R$  & 0\\
+  P$_{di}$   & $ -d_i \frac{[\text{P}_{di}]}{[\text{C}_{di}]^2}R$ &0 & 0 & 0&0&0&0 & $d_i\frac{1}{[\text{C}_{di}]} R$  & 0\\
   P$_m$    &$- \frac{[\text{P}_u]}{[\text{C}_u]^2} R$  & $\frac{[\text{P}_{di}]}{[\text{C}_{di}]^2} R$  & 0 & 0&0&0&$\frac{1}{[\text{C}_u]} R$   & $-\frac{1}{[\text{C}_{di}]} R$ & 0\\
   \end{tabular}
   }
 \end{table}
+
+
+
 
 \clearpage
 \section{Application Examples}
