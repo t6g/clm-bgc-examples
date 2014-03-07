@@ -1,0 +1,8 @@
+gnuplot clmc.gp		
+gnuplot clmcn.gp	
+gnuplot clmcnp.gp	
+gnuplot clmcnp2.gp	
+gnuplot lit1.gp		
+gnuplot lit1cn.gp	
+gnuplot lit1enzyme.gp	
+gnuplot lit1monod.gp

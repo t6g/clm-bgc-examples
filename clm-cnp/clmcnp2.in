@@ -137,7 +137,7 @@ CHEMISTRY
    /
   /
 :  LOG_FORMULATION
-  DATABASE ../../pflotran-clm4me/database/hanford.dat 
+  DATABASE ../../pflotran-clm-ngee-sci/database/hanford.dat 
   OUTPUT
     all
   /
@@ -158,9 +158,8 @@ GRID
   TYPE structured
   NXYZ 1 1 1
   BOUNDS
-    0.d0 1.d0
-    0.d0 1.d0
-    0.d0 1.d0
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
   /
 END
 
@@ -233,7 +232,7 @@ CONSTRAINT initial
     SOM3      1.d-10
     SOM4      1.d-10
     SOMD      1.d-10
-    P     1.d-5
+    P     2.5d-5
     Lit1P     8.96d-5
     Lit2P     2.22d-4
     Lit3P     1.29d-4
