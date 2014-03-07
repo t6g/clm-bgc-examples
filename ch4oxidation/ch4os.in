@@ -19,14 +19,15 @@ CHEMISTRY
     O2(aq)
   /
   REACTION_SANDBOX
-    CH4O
+    MICROBIAL
+      REACTION Methane(aq) + 2 O2(aq) <-> CO2(aq) + 2 H2O
       RATE_CONSTANT 1.25d-10 
-      HALFSATURATIONCH4 2.0d-4
-      HALFSATURATIONO2  1.0d-4
+      ELECTRON_DONOR    Methane(aq)   2.0d-4
+      ELECTRON_ACCEPTOR O2(aq)        1.0d-4
     /
   /
 :  LOG_FORMULATION
-  DATABASE ../../pflotran-clm4me/database/hanford.dat
+  DATABASE ../../pflotran-clm-ngee-sci/database/hanford.dat
   OUTPUT
     all
   /
@@ -42,9 +43,8 @@ GRID
   TYPE structured
   NXYZ 1 1 1
   BOUNDS
-    0.d0 1.d0
-    0.d0 1.d0
-    0.d0 1.d0
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
   /
 END
 

@@ -18,7 +18,6 @@ CHEMISTRY
     OH-
     CO3--
     CO2(aq)
-:    Acetic_acid(aq) 
   /
   REDOX_SPECIES
     Acetate-
@@ -28,14 +27,15 @@ CHEMISTRY
     Acemeg
   /
   REACTION_SANDBOX
-     AceMeg
-      RATE_CONSTANT      1.0d-6
-      HALFSATURATIONAC   1.0d-5
-      YIELDCOEFFICIENT   0.02
+     MICROBIAL
+      REACTION 1.01 Acetate- + 0.01 H+ <-> HCO3- + Methane(aq) + 0.02 Acemeg 
+      RATE_CONSTANT    1.0d-6
+      ELECTRON_DONOR Acetate- 1.0d-5
+      MICROBIAL_MASS Acemeg
      /
   /
 :  LOG_FORMULATION
-  DATABASE ../../pflotran-clm4me/database/hanford.dat
+  DATABASE ../../pflotran-clm-ngee-sci/database/hanford.dat
   OUTPUT
     all
   /
@@ -51,9 +51,8 @@ GRID
   TYPE structured
   NXYZ 1 1 1
   BOUNDS
-    0.d0 1.d0
-    0.d0 1.d0
-    0.d0 1.d0
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
   /
 END
 

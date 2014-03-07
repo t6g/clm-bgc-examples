@@ -1,0 +1,13 @@
+pflotran -pflotranin clmc.in
+pflotran -pflotranin clmcn1.in
+pflotran -pflotranin clmcn5.in
+pflotran -pflotranin clmcnp1.in
+pflotran -pflotranin clmcnp2.in
+pflotran -pflotranin lit1.in
+pflotran -pflotranin lit1cn1.in
+pflotran -pflotranin lit1cn8.in
+pflotran -pflotranin lit1cnp1.in
+pflotran -pflotranin lit1cnp2.in
+pflotran -pflotranin lit1monod.in
+pflotran -pflotranin lit1enzyme.in
+pflotran -pflotranin som1.in
