@@ -1,0 +1,532 @@
+ PFLOTRAN Header
+ WARNING: Card (MODE) not found in input file.
+ "structured_grid_type" set to default value.
+ pflotran card:: UNIFORM_VELOCITY
+ pflotran card:: REFERENCE_DENSITY
+ pflotran card:: CHEMISTRY
+ pflotran card:: LINEAR_SOLVER
+ pflotran card:: NEWTON_SOLVER
+ pflotran card:: GRID
+ pflotran card:: FLUID_PROPERTY
+ pflotran card:: MATERIAL_PROPERTY
+ pflotran card:: OUTPUT
+ pflotran card:: TIME
+ pflotran card:: REGION
+ all
+ pflotran card:: REGION
+ obs_pt
+ pflotran card:: OBSERVATION
+ pflotran card:: TRANSPORT_CONDITION
+ initial
+ pflotran card:: CONSTRAINT
+ initial
+ Constraint Species: Ammonia
+ Constraint Species: CO2(aq)
+ Constraint Immobile: SOM1
+ "SOM1 IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: SOM2
+ "SOM2 IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: SOM3
+ "SOM3 IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: SOM4
+ "SOM4 IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: Lit1C
+ "Lit1C IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: Lit2C
+ "Lit2C IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: Lit3C
+ "Lit3C IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: Lit1N
+ "Lit1N IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: Lit2N
+ "Lit2N IMMOBILE CONCENTRATION UNITS" set to default value.
+ Constraint Immobile: Lit3N
+ "Lit3N IMMOBILE CONCENTRATION UNITS" set to default value.
+ pflotran card:: INITIAL_CONDITION
+ "Initial Condition name" set to default value.
+ pflotran card:: STRATA
+
+ Requested processors and decomposition =     1, npx,y,z=   -1  -1  -1
+ Actual decomposition: npx,y,z=    1   1   1
+
+   Beginning setup of TRAN SNES
+ Solver: preonly
+ Preconditioner: lu
+   Finished setting up TRAN SNES
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+   Setting up TRAN Realization
+   Finished setting up TRAN Realization
+
+Transport Stepper:
+max steps: 999999999
+max constant cumulative time steps: 5
+max cuts: 16
+
+Transport Newton Solver:
+     atol:  1.0000E-50
+     rtol:  1.0000E-08
+     stol:  1.0000E-08
+     dtol: -2.0000E+00
+  maxnorm:  1.0000E+20
+inftolres:  1.0000E-50
+inftolupd:  1.0000E-50
+    maxit:    50
+     maxf: 10000
+
+matrix type:baij                
+precond. matrix type:baij                
+inexact newton: off
+print convergence: on
+print detailed convergence: off
+check infinity norm: on
+force at least 1 iteration: on
+
+Transport Linear Solver
+   solver:  preonly
+  precond:  lu
+     atol:  1.0000E-50
+     rtol:  1.0000E-05
+     dtol:  1.0000E+04
+    maxit:  10000
+ Default HDF5 method is used in Initialization
+ 
+   Finished Initialization
+
+== REACTIVE TRANSPORT =========================================================
+   0.0000000000000000        0.0000000000000000        1.5690712462680180E-011   0.0000000000000000        0.0000000000000000        0.0000000000000000       -2.5722479447016690E-011   0.0000000000000000        0.0000000000000000       -7.0688762443179979E-013   0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        8.4723069452916748E-011   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.3889027779166680E-010   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.3889027779166680E-010   0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        1.5690712462680180E-011   1.7031420314203139E-012   0.0000000000000000        0.0000000000000000       -2.5722479447016690E-011  -3.7847600698229199E-012   0.0000000000000000       -7.0688762443179979E-013  -1.0401029936225287E-013   0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        8.4723069452916748E-011   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        3.7202752979910748E-012   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.3889027779166680E-010   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -8.2672784399801660E-012   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.3889027779166680E-010   0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -8.2672784399801660E-012   0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        1.5690712462680180E-011   1.7031420314203139E-012   3.0810493290118078E-013   0.0000000000000000       -2.5722479447016690E-011  -3.7847600698229199E-012  -4.3395060971997297E-013  -7.0688762443179979E-013  -1.0401029936225287E-013  -1.1925539834428078E-014
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        8.4723069452916748E-011   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        3.7202752979910748E-012   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        1.1574189815972231E-012   0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.3889027779166680E-010   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -8.2672784399801660E-012   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.6301675797143989E-012   0.0000000000000000        0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.3889027779166680E-010   0.0000000000000000        0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -8.2672784399801660E-012   0.0000000000000000     
+   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000       -1.6301675797143989E-012
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeJacobian() line 2254 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeJacobian() line 2254 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 231 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  1[  0] t=  0.00000E+00 dt=  2.08333E-02
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  2[  0] t=  0.00000E+00 dt=  1.04167E-02
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  3[  0] t=  0.00000E+00 dt=  5.20833E-03
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  4[  0] t=  0.00000E+00 dt=  2.60417E-03
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  5[  0] t=  0.00000E+00 dt=  1.30208E-03
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  6[  0] t=  0.00000E+00 dt=  6.51042E-04
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  7[  0] t=  0.00000E+00 dt=  3.25521E-04
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  8[  0] t=  0.00000E+00 dt=  1.62760E-04
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut=  9[  0] t=  0.00000E+00 dt=  8.13802E-05
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut= 10[  0] t=  0.00000E+00 dt=  4.06901E-05
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut= 11[  0] t=  0.00000E+00 dt=  2.03451E-05
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut= 12[  0] t=  0.00000E+00 dt=  1.01725E-05
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut= 13[  0] t=  0.00000E+00 dt=  5.08626E-06
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut= 14[  0] t=  0.00000E+00 dt=  2.54313E-06
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut= 15[  0] t=  0.00000E+00 dt=  1.27157E-06
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ -> Cut time step: snes=  0 icut= 16[  0] t=  0.00000E+00 dt=  6.35783E-07
+[0]PETSC ERROR: PetscMallocValidate: error detected at  SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: Memory at address 0x284e290 is corrupted
+[0]PETSC ERROR: Probably write past beginning or end of array
+[0]PETSC ERROR: Last intact block allocated in PetscStrallocpy() line 188 in /home/t6g/bitbucket/petsc/src/sys/utils/str.c
+[0]PETSC ERROR: --------------------- Error Message ------------------------------------
+[0]PETSC ERROR: Memory corruption!
+[0]PETSC ERROR:  !
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Petsc Development GIT revision: 06283fd4323cef45a7147b2226c8e0c084e2a1d2  GIT Date: 2014-01-05 12:40:00 -0600
+[0]PETSC ERROR: See docs/changes/index.html for recent updates.
+[0]PETSC ERROR: See docs/faq.html for hints about trouble shooting.
+[0]PETSC ERROR: See docs/index.html for manual pages.
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: pflotran on a arch-linux2-c-debug named ubuntu by t6g Fri Feb 28 15:34:03 2014
+[0]PETSC ERROR: Libraries linked from /home/t6g/bitbucket/petsc/arch-linux2-c-debug/lib
+[0]PETSC ERROR: Configure run at Fri Jan 24 10:18:27 2014
+[0]PETSC ERROR: Configure options --download-f-blas-lapack=1 --download-metis=1 --download-parmetis=1 --with-hdf5-dir=/usr --with-hdf5=1 --with-mpi-dir=/usr --with-mpi=1 PETSC_ARCH=arch-linux2-c-debug
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: PetscMallocValidate() line 135 in /home/t6g/bitbucket/petsc/src/sys/memory/mtr.c
+[0]PETSC ERROR: SNESComputeFunction() line 2088 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+[0]PETSC ERROR: SNESSolve_NEWTONLS() line 175 in /home/t6g/bitbucket/petsc/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: SNESSolve() line 3812 in /home/t6g/bitbucket/petsc/src/snes/interface/snes.c
+ --> max_time_step_cuts exceeded: icut/icutmax=           17          16 t=    6.3578287760416663E-007  dt=    6.3578287760416663E-007
+ Stopping execution!
+
+ TS BE steps =      0 newton =        0 linear =          0 cuts =      0
+ TS BE SNES time = 0.0 seconds
+
+ Wall Clock Time:  2.5195E-02 [sec]   4.1991E-04 [min]   6.9986E-06 [hr]

@@ -1,0 +1,23 @@
+gnuplot bacteria.gp
+gnuplot clm-microbe-1.gp
+gnuplot dom1-no3.gp
+gnuplot lit1-microbe-0.gp
+gnuplot som1.gp
+gnuplot clmcnd1.gp
+gnuplot deni.gp
+gnuplot dom2-no3.gp
+gnuplot lit1-microbe-1.gp
+gnuplot som4.gp
+gnuplot clmcnd2.gp
+gnuplot dom0.gp
+gnuplot lit1a-no3.gp
+gnuplot som1a.gp
+gnuplot clmcnd3.gp
+gnuplot dom0-no3.gp
+gnuplot lit1b-no3.gp
+gnuplot som1b.gp
+gnuplot clm-microbe-0.gp
+gnuplot dom1.gp
+gnuplot lit1c-no3.gp
+gnuplot som1c.gp
+
