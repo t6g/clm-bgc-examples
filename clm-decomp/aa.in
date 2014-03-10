@@ -1,0 +1,144 @@
+:Description: Batch CLM-CN simulation
+: Rate constants, C/N ratios, respiration fractions from Bonan et al., 2012
+
+:=========================== useful tranport parameters ==================
+UNIFORM_VELOCITY 0.d0 0.d0 0.d0 
+
+REFERENCE_DENSITY 1.d3
+
+:=========================== chemistry ========================================
+CHEMISTRY
+  PRIMARY_SPECIES
+    Acetate-
+    Methane(aq)
+    HCO3-
+    H+
+  END
+
+  SECONDARY_SPECIES
+    OH-
+  END
+
+  REDOX_SPECIES
+    Acetate-
+    Methane(aq)
+    HCO3-
+  END
+  
+  GAS_SPECIES
+    CO2(g)
+    CH4(g)
+  END
+
+  IMMOBILE_SPECIES
+    Fermentors
+  END
+
+  REACTION_SANDBOX
+    MICROBIAL
+      REACTION 1.1 Acetate- + 0.1 H+ + H2O <-> HCO3- + Methane(aq) + 0.1 Fermentors
+      RATE_CONSTANT               1.0d-7
+      ELECTRON_DONOR Acetate-     2.3d-5
+      MICROBIAL_MASS Fermentors
+    END
+  END
+
+:  LOG_FORMULATION
+  DATABASE ../../pflotran-clm-ngee-sci/database/hanford.dat
+  OUTPUT
+    all
+  /
+END
+
+:=========================== solver options ===================================
+LINEAR_SOLVER TRANSPORT
+  SOLVER DIRECT
+END
+
+:=========================== discretization ===================================
+GRID
+  TYPE structured
+  NXYZ 1 1 1
+  BOUNDS
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
+  /
+END
+
+:=========================== fluid properties =================================
+FLUID_PROPERTY 
+  DIFFUSION_COEFFICIENT 1.d-9
+END
+
+:=========================== material properties ==============================
+MATERIAL_PROPERTY soil1
+  ID 1
+  POROSITY 0.25d0
+  TORTUOSITY 1.d0
+END
+
+:=========================== output options ===================================
+OUTPUT
+  PERIODIC_OBSERVATION TIMESTEP 1
+END
+
+:=========================== times ============================================
+TIME
+  FINAL_TIME 200.d0 d
+  INITIAL_TIMESTEP_SIZE 1.d0 h
+  MAXIMUM_TIMESTEP_SIZE 2.d0 d
+END
+
+:=========================== regions ==========================================
+REGION all
+  COORDINATES
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
+  /
+END
+
+REGION obs_pt
+  COORDINATE 0.5 0.5 0.5
+END
+
+:=========================== observation points ===============================
+OBSERVATION
+  REGION obs_pt
+END
+
+:=========================== transport conditions =============================
+TRANSPORT_CONDITION initial
+  TYPE zero_gradient
+  CONSTRAINT_LIST
+    0.d0 initial
+  /
+END
+
+:=========================== transport constraints ============================
+CONSTRAINT initial
+  CONCENTRATIONS
+    Acetate-    0.001   T
+    Methane(aq) 1.0d-10 T
+    HCO3-       1.0d-10 T
+    H+          1.0d-7  T
+  /
+
+  IMMOBILE
+    Fermentors 1.0d-6 
+  END
+END
+
+:=========================== condition couplers ===============================
+: initial condition
+INITIAL_CONDITION
+  TRANSPORT_CONDITION initial
+  REGION all
+END
+
+:=========================== stratigraphy couplers ============================
+STRATA
+  REGION all
+  MATERIAL soil1
+END
+
+
