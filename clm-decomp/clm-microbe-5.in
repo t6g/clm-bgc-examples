@@ -15,7 +15,7 @@ CHEMISTRY
     NO2-
     N2O(aq)
     N2(aq)
-    AmmoniaH4+
+    NH4+
     HPO4--
     O2(aq)
     SO4--
@@ -33,7 +33,7 @@ CHEMISTRY
   SECONDARY_SPECIES
     CO2(aq)
     CO3--
-    AmmoniaH3(aq)
+    NH3(aq)
     PO4---
     H2PO4-
     H3PO4(aq)
@@ -102,11 +102,11 @@ IMMOBILE_SPECIES
     ION_EXCHANGE_RXN
       CEC  1.d-1   !eq/m3
       CATIONS
-         Na+         1.00d0 
-         K+          0.20d0
-         AmmoniaH4+  0.25d0
-         Ca++        0.40d0
-         Mg++        0.50d0
+         Na+   1.00d0 
+         K+    0.20d0
+         NH4+  0.25d0
+         Ca++  0.40d0
+         Mg++  0.50d0
       END
     END
   END
@@ -408,7 +408,7 @@ CONSTRAINT initial
     NO2-        1.0d-20    T
     N2O(aq)     1.0d-20    T
     N2(aq)      1.0d-20    T
-    AmmoniaH4+  1.0d-4     T
+    NH4+        1.0d-4     T
     HPO4--      1.0d-20    T
     O2(aq)      1.0d-20    T
     SO4--       1.0d-20    T
