@@ -1,4 +1,3 @@
-pflotran -pflotranin cec.in
 pflotran -pflotranin dom.in
 pflotran -pflotranin dom0.in
 pflotran -pflotranin dom1.in
