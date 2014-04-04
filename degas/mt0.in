@@ -1,0 +1,148 @@
+:check if there is a problem with mass transfer + cec for NH4+
+
+:=========================== useful tranport parameters =======================
+UNIFORM_VELOCITY 0.d0 0.d0 0.d0 
+
+REFERENCE_DENSITY 1.d3
+
+:=========================== chemistry ========================================
+CHEMISTRY
+  PRIMARY_SPECIES
+    H+
+    HCO3-
+  /
+  SECONDARY_SPECIES
+    OH-
+    CO2(aq)
+    CO3--
+  /
+  IMMOBILE_SPECIES
+    Cimm
+    Himm
+  END
+
+:  LOG_FORMULATION
+  DATABASE ../../pflotran-dev/database/hanford.dat 
+  OUTPUT
+    all
+  /
+END
+
+:=========================== solver options ===================================
+LINEAR_SOLVER TRANSPORT
+  SOLVER DIRECT
+END
+
+NEWTON_SOLVER TRANSPORT
+  ATOL 1.d-50
+:  RTOL 1.d-12
+END
+
+:=========================== discretization ===================================
+GRID
+  TYPE structured
+  NXYZ 1 1 1
+  BOUNDS
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
+  /
+END
+
+:=========================== fluid properties =================================
+FLUID_PROPERTY 
+  DIFFUSION_COEFFICIENT 1.d-9
+END
+
+:=========================== material properties ==============================
+MATERIAL_PROPERTY soil1
+  ID 1
+  POROSITY 0.25d0
+  TORTUOSITY 1.d0
+END
+
+:=========================== output options ===================================
+OUTPUT
+  PERIODIC_OBSERVATION TIMESTEP 1
+END
+
+:=========================== times ============================================
+TIME
+  FINAL_TIME 10.d0 d
+  INITIAL_TIMESTEP_SIZE 1.d-2 h
+  MAXIMUM_TIMESTEP_SIZE 1.d-1 d
+END
+
+:=========================== regions ==========================================
+REGION all
+  COORDINATES
+    0.d0 0.d0 0.d0
+    1.d0 1.d0 1.d0
+  /
+END
+
+REGION obs_pt
+  COORDINATE 0.5 0.5 0.5
+END
+
+:=========================== observation points ===============================
+OBSERVATION
+  REGION obs_pt
+END
+
+:=========================== transport conditions =============================
+TRANSPORT_CONDITION initial
+  TYPE zero_gradient
+  CONSTRAINT_LIST
+    0.d0 initial
+  /
+END
+
+:=========================== transport constraints ============================
+CONSTRAINT initial
+  CONCENTRATIONS
+    H+    6.3d0  pH
+    HCO3- 1.0d-6 Z
+  /
+  IMMOBILE
+    Cimm  1.d-20
+    Himm  1.d-20
+  /
+END
+
+:=========================== condition couplers ===============================
+: initial condition
+INITIAL_CONDITION
+  TRANSPORT_CONDITION initial
+  REGION all
+END
+
+:=========================== stratigraphy couplers ============================
+STRATA
+  REGION all
+  MATERIAL soil1
+END
+
+:=========================== datasets =========================================
+DATASET GLOBAL H+
+  FILENAME mass-transfer-hco3.h5 
+  HDF5_DATASET_NAME H+
+END
+
+DATASET GLOBAL HCO3-
+  FILENAME mass-transfer-hco3.h5 
+  HDF5_DATASET_NAME HCO3-
+END
+
+:=========================== mass transfer ====================================
+RT_MASS_TRANSFER H+
+  IDOF 1
+  DATASET H+
+END
+
+RT_MASS_TRANSFER HCO3-
+  IDOF 2
+  DATASET HCO3-
+END
+
+
+
